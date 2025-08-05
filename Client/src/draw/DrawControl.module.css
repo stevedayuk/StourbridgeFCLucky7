@@ -1,0 +1,43 @@
+.container {
+    background-color: #f1f1f1;
+    height: 1000px;
+    padding: 50px;
+}
+
+.control {
+    background-image: url('images/stourbridge-home-ba-2024.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: black;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+}
+
+.number {
+    color: white;
+    display: flex;
+    flex: 1;
+    font-size: 13rem;
+    font-weight: 900;
+    flex-direction: column;
+    text-shadow: 2px 2px 4px #000000;
+}
+
+.drawingNumber {
+    margin: auto auto;
+}
+
+.footer {
+    align-items: center;
+    background-color: #f1f1f1;
+    background-color: rgba(241, 241, 241, 0.8);
+    border: solid 1px black;
+    display: flex;
+    font-size: 4rem;
+    gap: 2rem;
+    height: 100px;
+    padding: 0 1rem;
+}

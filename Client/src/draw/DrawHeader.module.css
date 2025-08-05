@@ -1,0 +1,14 @@
+.drawHeader {
+    align-items: center;
+    background-color: var(--sfc-red);
+    color: white;
+    display: flex;
+    justify-content: center;
+    padding: 0.5rem;
+}
+
+.drawHeaderLogo {
+    height: 50px;
+    margin-right: 1rem;
+    width: 50px;
+}
