@@ -7,7 +7,8 @@ import {useEffect, useState} from "react";
 import Spinner from "../layouts/Spinner.tsx";
 
 type ExportFormProps = {
-    startDraw: () => void;
+    isTest?: boolean;
+    startDraw: (drawMonth: number, drawYear: number) => void;
 }
 
 export default function StartDraw(props: ExportFormProps) {
@@ -31,12 +32,29 @@ export default function StartDraw(props: ExportFormProps) {
         return <Spinner />;
     }
 
+    const drawButtonLabel = props.isTest ? 'Start Test Draw' : 'Start Draw';
+
     return <div className={styles.startDraw}>
-        <h1>Start New Draw</h1>
-        <p>You're about to start a new draw for {currentDrawMonthName} {drawInfo.drawYear}.</p>
-        <Alert variant="warning">
-            After selecting 'Start Draw' below, don't forget to go into Full Screen mode before displaying the draw screen to the public.
-        </Alert>
-        <Button variant="danger" onClick={() => props.startDraw()} size={"lg"}>Start Draw</Button>
+        {props.isTest && <div>
+            <h1>Start New Test Draw</h1>
+            <p>You are about to start a new test draw.</p>
+            <Alert variant={"info"}>
+                This draw will use the current active user data, but will not save the selected winners to the database.
+            </Alert>
+        </div>}
+
+        {!props.isTest && <div>
+            <h1>Start New Draw</h1>
+            <p>You're about to start a new draw for {currentDrawMonthName} {drawInfo.drawYear}.</p>
+            <Alert variant={"warning"}>
+                After selecting 'Start Draw' below, don't forget to go into Full Screen mode before displaying the draw screen to the public.
+            </Alert>
+        </div>}
+
+        <Button variant="danger"
+                onClick={() => props.startDraw(drawInfo?.drawMonth, drawInfo?.drawYear)}
+                size={"lg"}>
+            {drawButtonLabel}
+        </Button>
     </div>;
 }

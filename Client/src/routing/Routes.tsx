@@ -10,7 +10,8 @@ export default function Routes() {
             path: '/', element: <RootLayout/>, children: [
                 {path: '/', element: <HomePage/>},
                 {path: '/products', element: <ProductsPage/>},
-                {path: '/draw', element: <DrawPage />}
+                {path: '/draw', element: <DrawPage />},
+                {path: '/draw/test', element: <DrawPage isTest={true} />} // Assuming you want to handle specific draws
             ]
         }
     ]);

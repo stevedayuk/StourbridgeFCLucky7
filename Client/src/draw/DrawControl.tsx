@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button'
 import {setAsWinner} from "../store/current-draw-slice.ts";
 import type {DrawEntry} from "../types/DrawEntry.ts";
 import type {DrawWinner} from "../types/DrawWinner.ts";
+import {post, put} from "../util/http.ts";
 
 export default function DrawControl() {
     const currentDraw = useAppSelector(state => state.currentDraw.draw);
@@ -16,6 +17,7 @@ export default function DrawControl() {
     const entryCount = entries?.length ?? 0;
     const [number, setNumber] = useState(1);
     const [isDrawing, setIsDrawing] = useState(false);
+    const [isDrawComplete, setIsDrawComplete] = useState(false);
     const timerRef = useRef<number | null>(null);
 
     function drawNumber() {
@@ -45,7 +47,7 @@ export default function DrawControl() {
         const duration = currentDraw!.numberSelectionTime * 1000;
         const interval = 100;
 
-        timerRef.current = window.setInterval(() => {
+        timerRef.current = window.setInterval(async () => {
             let numberIndex = shuffle();
             numberIndex = numberIndex - 1;
             const potentialWinner = entries![numberIndex];
@@ -55,9 +57,28 @@ export default function DrawControl() {
             if (elapsed >= duration && timerRef.current) {
                 setNumber(potentialWinner.number);
                 setCurrentWinner(potentialWinner);
-                dispatch(setAsWinner({drawEntry: potentialWinner, prizeAmount: currentWinningPrizeLevel.prizeAmount, drawOrder: currentDraw.drawOrder}));
+                dispatch(setAsWinner(
+                    {
+                        drawEntry: potentialWinner,
+                        prizeAmount: currentWinningPrizeLevel.prizeAmount,
+                        drawOrder: currentDraw.drawOrder,
+                        isTest: currentDraw.isTest
+                    }
+                ));
                 clearInterval(timerRef.current);
                 setIsDrawing(false);
+
+                const unnamedWinners = currentDraw.winners.filter(winner => !winner.name);
+                if (unnamedWinners.length === 1) {
+                    const apiUrl = import.meta.env.VITE_API_URL + "/draws/complete";
+                    const body = {
+                        drawMonth: currentDraw.drawInfo!.drawMonth,
+                        drawYear: currentDraw.drawInfo!.drawYear,
+                    }
+
+                    await put(apiUrl, body);
+                    setIsDrawComplete(true);
+                }
             }
         }, interval);
 
@@ -68,15 +89,18 @@ export default function DrawControl() {
         };
     }
 
+    function completeDraw() {
+        console.log('Draw complete!')
+    }
 
     return <div className={styles.container}>
         <div className={styles.control}>
-            { (isDrawing || currentWinner) &&
             <div className={styles.number}>
-                <span className={styles.drawingNumber}>{number}</span>
+                {(isDrawing || currentWinner) &&
+                    <span className={styles.drawingNumber}>{number}</span>
+                }
             </div>
-            }
-            { !isDrawing && currentWinner &&
+            {!isDrawing && currentWinner &&
                 <div className={styles.footer}>
                     <div>
                         £{currentWinningPrizeLevel?.prizeAmount}
@@ -86,13 +110,25 @@ export default function DrawControl() {
                     </div>
                 </div>
             }
-            <div>
-                <Button variant={"danger"} onClick={() => drawNumber()}>Draw</Button>
-            </div>
-            <div>
-                {entryCount}
-            </div>
+            <div className={styles.drawButtonContainer}>
+                {(!isDrawing && !isDrawComplete) &&
 
+                    <Button className={"w-100"}
+                            variant={"danger"}
+                            size={"lg"}
+                            onClick={() => drawNumber()}>
+                        Draw Number
+                    </Button>
+                }
+                {!isDrawing && isDrawComplete &&
+                    <Button className={"w-100"}
+                            variant={"danger"}
+                            size={"lg"}
+                            onClick={() => completeDraw()}>
+                        Complete Draw
+                    </Button>
+                }
+            </div>
         </div>
     </div>
 }

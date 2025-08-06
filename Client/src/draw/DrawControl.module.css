@@ -1,14 +1,14 @@
 .container {
     background-color: #f1f1f1;
     height: 1000px;
-    padding: 50px;
+    padding: 50px 50px 10px 50px;
 }
 
 .control {
-    background-image: url('images/stourbridge-home-ba-2024.png');
+    background-image: url('/images/stourbridge-home-ba-2024.png');
     background-position: center;
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: contain;
     color: black;
     display: flex;
     flex-direction: column;
@@ -40,4 +40,10 @@
     gap: 2rem;
     height: 100px;
     padding: 0 1rem;
+}
+
+.drawButtonContainer {
+    height: 50px;
+    margin-top: 1rem;
+    text-align: center;
 }
