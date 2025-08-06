@@ -14,6 +14,14 @@
     color: white;
 }
 
+.prizeAmountColumn {
+    width: 90px;
+}
+
+.winningEntryNumberColumn {
+    width: 90px;
+}
+
 .drawPromo {
     flex: 0;
 }

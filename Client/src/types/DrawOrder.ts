@@ -1,0 +1,1 @@
+export type DrawOrder = "lowest_first" | "highest_first";

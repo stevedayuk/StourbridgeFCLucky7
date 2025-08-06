@@ -1,5 +1,7 @@
 import {createSlice, type PayloadAction} from '@reduxjs/toolkit'
 import type {CurrentDraw} from "../types/CurrentDraw.ts";
+import type {DrawEntry} from "../types/DrawEntry.ts";
+import type {DrawOrder} from "../types/DrawOrder.ts";
 
 
 type CurrentDrawState = {
@@ -17,11 +19,19 @@ export const currentDrawSlice = createSlice({
         populateDrawEntries(state, action: PayloadAction<CurrentDraw>) {
             state.draw = action.payload;
         },
-        setAsWinner(state, action: PayloadAction<{ number: number, prizeAmount: number }>) {
-            const entryIndex = state.draw?.entries.findIndex(entry => entry.number === action.payload.number);
+        setAsWinner(state, action: PayloadAction<{ drawEntry: DrawEntry, prizeAmount: number, drawOrder: DrawOrder }>) {
+            const entryIndex = state.draw?.entries.findIndex(entry => entry.number === action.payload.drawEntry.number);
             if (entryIndex !== undefined && entryIndex !== -1) {
+                console.log(state.draw!.entries[entryIndex]);
                 state.draw!.entries[entryIndex].isWinner = true;
-                //TODO: Add prize amount to winners array
+                const winnerIndex = action.payload.drawOrder === 'highest_first'
+                    ? state.draw?.winners.findIndex(entry => entry.prizeAmount === action.payload.prizeAmount && !entry.name)
+                    : state.draw?.winners.findLastIndex(entry => entry.prizeAmount === action.payload.prizeAmount && !entry.name);
+                state.draw!.winners[winnerIndex!] = {
+                    ...state.draw!.winners[winnerIndex!],
+                    name: action.payload.drawEntry.name,
+                    number: action.payload.drawEntry.number
+                };
             }
         }
     }

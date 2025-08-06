@@ -15,10 +15,12 @@ export default function DrawSidebar() {
                 <tbody>
                 {currentDraw?.winners?.map((winner, index) => (
                     <tr className={"h2"} key={index}>
-                        <td>
+                        <td className={styles.prizeAmountColumn}>
                             £{winner.prizeAmount}
                         </td>
-                        <td>{winner.number}</td>
+                        <td className={styles.winningEntryNumberColumn}>
+                            {winner.number}
+                        </td>
                         <td>{winner.name}</td>
                     </tr>
                 ))}
