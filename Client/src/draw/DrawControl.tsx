@@ -6,8 +6,13 @@ import {setAsWinner} from "../store/current-draw-slice.ts";
 import type {DrawEntry} from "../types/DrawEntry.ts";
 import type {DrawWinner} from "../types/DrawWinner.ts";
 import {post, put} from "../util/http.ts";
+import type {SetDrawWinner} from "../types/SetDrawWinner.ts";
 
-export default function DrawControl() {
+type DrawControlProps = {
+    completeDraw: () => void;
+};
+
+export default function DrawControl(props: DrawControlProps) {
     const currentDraw = useAppSelector(state => state.currentDraw.draw);
     const [currentWinner, setCurrentWinner] = useState<DrawEntry | null>(null);
     const [currentWinningPrizeLevel, setCurrentWinningPrizeLevel] = useState<DrawWinner | null>(null);
@@ -15,10 +20,14 @@ export default function DrawControl() {
 
     const entries = currentDraw?.entries.filter(entry => !entry.isWinner);
     const entryCount = entries?.length ?? 0;
-    const [number, setNumber] = useState(1);
+    const [number, setNumber] = useState(0);
     const [isDrawing, setIsDrawing] = useState(false);
     const [isDrawComplete, setIsDrawComplete] = useState(false);
     const timerRef = useRef<number | null>(null);
+
+    function completeDraw() {
+        props.completeDraw();
+    }
 
     function drawNumber() {
         const shuffle = () => {
@@ -65,19 +74,34 @@ export default function DrawControl() {
                         isTest: currentDraw.isTest
                     }
                 ));
+
                 clearInterval(timerRef.current);
                 setIsDrawing(false);
 
                 const unnamedWinners = currentDraw.winners.filter(winner => !winner.name);
                 if (unnamedWinners.length === 1) {
-                    const apiUrl = import.meta.env.VITE_API_URL + "/draws/complete";
-                    const body = {
-                        drawMonth: currentDraw.drawInfo!.drawMonth,
-                        drawYear: currentDraw.drawInfo!.drawYear,
+                    if (!currentDraw.isTest) {
+                        const apiUrl = import.meta.env.VITE_API_URL + "/draws/complete";
+                        const body = {
+                            drawMonth: currentDraw.drawInfo!.drawMonth,
+                            drawYear: currentDraw.drawInfo!.drawYear,
+                        }
+
+                        await put(apiUrl, body);
                     }
 
-                    await put(apiUrl, body);
                     setIsDrawComplete(true);
+                }
+
+                if (!currentDraw.isTest) {
+                    const setDrawWinner: SetDrawWinner = {
+                        drawId: currentDraw.drawInfo.drawId,
+                        prizeLevelId: currentWinningPrizeLevel.prizeLevelId,
+                        entryId: potentialWinner.entryId,
+                    };
+
+                    const apiUrl = import.meta.env.VITE_API_URL + "/draws/set-winner";
+                    await post(apiUrl, setDrawWinner)
                 }
             }
         }, interval);
@@ -87,10 +111,6 @@ export default function DrawControl() {
                 clearInterval(timerRef.current);
             }
         };
-    }
-
-    function completeDraw() {
-        console.log('Draw complete!')
     }
 
     return <div className={styles.container}>

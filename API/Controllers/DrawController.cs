@@ -44,6 +44,13 @@ public class DrawController : ControllerBase
         return currentDraw;
     }
 
+    [HttpPost("set-winner")]
+    public async Task<ActionResult<DrawWinner>> SetDrawWinner(SetDrawWinnerDto setDrawWinner)
+    {
+        DrawWinner drawWinner = await _drawService.SetDrawWinnerAsync(setDrawWinner);
+        return drawWinner;
+    }
+
     [HttpPost("start")]
     public async Task<ActionResult<Draw>> StartDraw(CurrentDrawInfoDto currentDrawDto)
     {

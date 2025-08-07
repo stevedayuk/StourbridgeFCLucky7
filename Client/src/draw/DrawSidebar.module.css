@@ -9,6 +9,11 @@
     flex: 1;
 }
 
+.drawWinnersHeader {
+    margin: 1rem 0;
+    text-transform: uppercase;
+}
+
 .winnersTable > tbody > tr:nth-child(2n+1) > td {
     background-color: var(--sfc-red);
     color: white;

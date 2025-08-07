@@ -51,28 +51,25 @@ public class DrawService
     {
         List<Option> options = await _dataContext.Options.AsNoTracking().ToListAsync();
 
-        string? drawMonthString = options.FirstOrDefault(p => p.Name == OptionConstants.NextDrawMonth)?.Value;
-        string? drawYearString = options.FirstOrDefault(p => p.Name == OptionConstants.NextDrawYear)?.Value;
         string? numberSelectionTimeString =
             options.FirstOrDefault(p => p.Name == OptionConstants.NumberSelectionTime)?.Value;
-        if (drawMonthString is null || drawYearString is null || numberSelectionTimeString is null)
+        
+        if (numberSelectionTimeString is null)
         {
-            throw new InvalidOperationException("Next draw month, year or number selection time not set in options.");
+            throw new InvalidOperationException("Number selection time not set in options.");
         }
 
-        if (int.TryParse(drawMonthString, out int drawMonth) is false ||
-            int.TryParse(drawYearString, out int drawYear) is false ||
-            int.TryParse(numberSelectionTimeString, out int numberSelectionTime) is false)
+        if (int.TryParse(numberSelectionTimeString, out int numberSelectionTime) is false)
         {
-            throw new InvalidOperationException("Invalid next draw month or year format in options.");
+            throw new InvalidOperationException("Invalid number selection time in options.");
         }
 
         string drawOrder = options.FirstOrDefault(p => p.Name == OptionConstants.DrawOrder)?.Value ??
                            OptionConstants.DrawOrderLowestFirst;
 
         CurrentDrawInfoDto currentDrawInfo = await GetCurrentDrawInfoAsync();
-        List<DrawEntryDto> drawEntriesList = await GetDrawEntriesAsync();
-        List<DrawWinnerDto> winnersList = await GetDrawPrizesAsync(drawOrder);
+        List<DrawEntryDto> drawEntriesList = await GetCurrentDrawEntriesAsync();
+        List<DrawWinnerDto> winnersList = await GetCurrentDrawPrizesAsync(drawOrder);
 
         CurrentDrawDto currentDraw = new CurrentDrawDto();
         currentDraw.DrawInfo = currentDrawInfo;
@@ -101,21 +98,31 @@ public class DrawService
         {
             throw new InvalidOperationException("Invalid next draw month or year format in options.");
         }
+        
+        var currentDrawDetails = await _dataContext.Draws
+            .Where(p => p.Month == drawMonth && p.Year == drawYear && p.DateTimeDrawCompletedUtc == null)
+            .Select(p => new {p.Id, p.DateTimeDrawCompletedUtc})
+            .FirstOrDefaultAsync();
+        var currentDrawInProgress =
+            currentDrawDetails is { } && currentDrawDetails.DateTimeDrawCompletedUtc.HasValue is false;
 
         CurrentDrawInfoDto currentDrawInfo = new CurrentDrawInfoDto
         {
+            DrawId = currentDrawDetails?.Id,
             DrawMonth = drawMonth,
-            DrawYear = drawYear
+            DrawYear = drawYear,
+            InProgress = currentDrawInProgress
         };
 
         return currentDrawInfo;
     }
     
-    private async Task<List<DrawEntryDto>> GetDrawEntriesAsync()
+    private async Task<List<DrawEntryDto>> GetCurrentDrawEntriesAsync()
     {
         List<DrawEntryDto> drawEntriesList = await _dataContext.Entries.AsNoTracking()
             .Select(p => new DrawEntryDto
             {
+                EntryId = p.Id,
                 Number = p.Number,
                 Name = p.Name,
                 IsWinner = false
@@ -124,7 +131,7 @@ public class DrawService
         return drawEntriesList;
     }
 
-    private async Task<List<DrawWinnerDto>> GetDrawPrizesAsync(string drawOrder)
+    private async Task<List<DrawWinnerDto>> GetCurrentDrawPrizesAsync(string drawOrder)
     {
         List<PrizeLevel> prizeLevelsList =
             await _dataContext.PrizeLevels.AsNoTracking()
@@ -132,17 +139,58 @@ public class DrawService
                 .OrderByDescending(p => p.Amount)
                 .ToListAsync();
 
-        List<DrawWinnerDto> drawPrizesList = new();
+        CurrentDrawInfoDto currentDraw = await GetCurrentDrawInfoAsync();
+        List<DrawWinner> currentDrawWinnersList = [];
 
+        if (currentDraw.InProgress)
+        {
+            currentDrawWinnersList = await _dataContext.DrawWinners
+                .AsNoTracking()
+                .Include(p => p.Entry)
+                .Include(p => p.PrizeLevel)
+                .Where(p => p.DrawId == currentDraw.DrawId)
+                .ToListAsync();
+        }
+        
+        List<DrawWinnerDto> drawPrizesList = new();
+        
         foreach (PrizeLevel prizeLevel in prizeLevelsList)
         {
-            for (int c = 0; c < prizeLevel.Winners; c++)
+            var prizeWinners = currentDrawWinnersList
+                .Where(w => w.PrizeLevelId == prizeLevel.Id)
+                .ToList();
+        
+            int totalWinners = prizeLevel.Winners;
+            int allocatedWinners = prizeWinners.Count;
+        
+            for (int c = 0; c < totalWinners; c++)
             {
-                DrawWinnerDto drawPrize = new DrawWinnerDto
+                DrawWinnerDto drawPrize;
+                // For lowest_first, allocate winners to the last entries
+                int winnerIndex = drawOrder == OptionConstants.DrawOrderHighestFirst
+                    ? c
+                    : c - (totalWinners - allocatedWinners);
+        
+                if (winnerIndex >= 0 && winnerIndex < allocatedWinners)
                 {
-                    PrizeAmount = prizeLevel.Amount
-                };
-
+                    var winner = prizeWinners[winnerIndex];
+                    drawPrize = new DrawWinnerDto
+                    {
+                        Number = winner.Entry.Number,
+                        Name = winner.Entry.Name,
+                        PrizeLevelId = prizeLevel.Id,
+                        PrizeAmount = prizeLevel.Amount
+                    };
+                }
+                else
+                {
+                    drawPrize = new DrawWinnerDto
+                    {
+                        PrizeLevelId = prizeLevel.Id,
+                        PrizeAmount = prizeLevel.Amount
+                    };
+                }
+        
                 drawPrizesList.Add(drawPrize);
             }
         }
@@ -169,8 +217,8 @@ public class DrawService
         string drawOrder = options.FirstOrDefault(p => p.Name == OptionConstants.DrawOrder)?.Value ??
                            OptionConstants.DrawOrderLowestFirst;
         
-        List<DrawEntryDto> drawEntriesList = await GetDrawEntriesAsync();
-        List<DrawWinnerDto> winnersList = await GetDrawPrizesAsync(drawOrder);
+        List<DrawEntryDto> drawEntriesList = await GetCurrentDrawEntriesAsync();
+        List<DrawWinnerDto> winnersList = await GetCurrentDrawPrizesAsync(drawOrder);
 
         CurrentDrawDto currentDraw = new CurrentDrawDto();
         currentDraw.IsTest = true;
@@ -180,6 +228,22 @@ public class DrawService
         currentDraw.Winners = winnersList;
 
         return currentDraw;
+    }
+
+    public async Task<DrawWinner> SetDrawWinnerAsync(SetDrawWinnerDto setDrawWinner)
+    {
+        DrawWinner drawWinner = new DrawWinner
+        {
+            DrawId = setDrawWinner.DrawId,
+            PrizeLevelId = setDrawWinner.PrizeLevelId,
+            EntryId = setDrawWinner.EntryId,
+            DateTimeDrawnUtc = DateTime.UtcNow
+        };
+        
+        _dataContext.DrawWinners.Add(drawWinner);
+        await _dataContext.SaveChangesAsync();
+
+        return drawWinner;
     }
     
     public async Task<Draw> StartDrawAsync(CurrentDrawInfoDto currentDrawInfo)

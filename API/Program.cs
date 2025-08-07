@@ -12,11 +12,12 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-builder.Services.AddDbContext<Lucky7Context>(options =>
+builder.Services.AddDbContextPool<Lucky7Context>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("Lucky7DataContext"))
         .UseSnakeCaseNamingConvention();
 });
+
 builder.Services.AddApiServices();
 
 builder.Services.AddCors(options =>

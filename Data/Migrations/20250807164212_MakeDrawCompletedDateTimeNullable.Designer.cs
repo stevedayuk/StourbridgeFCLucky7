@@ -2,18 +2,21 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using StourbridgeFc.Lucky7.Data;
 
 #nullable disable
 
-namespace StourbridgeFC.Lucky7.Data.Migrations
+namespace StourbridgeFc.Lucky7.Data.Migrations
 {
     [DbContext(typeof(Lucky7Context))]
-    partial class Lucky7ContextModelSnapshot : ModelSnapshot
+    [Migration("20250807164212_MakeDrawCompletedDateTimeNullable")]
+    partial class MakeDrawCompletedDateTimeNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -61,10 +64,6 @@ namespace StourbridgeFC.Lucky7.Data.Migrations
                         .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("DateTimeDrawnUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("date_time_drawn_utc");
 
                     b.Property<int>("DrawId")
                         .HasColumnType("integer")

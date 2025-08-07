@@ -18,7 +18,12 @@ export const currentDrawSlice = createSlice({
         populateDrawEntries(state, action: PayloadAction<CurrentDraw>) {
             state.draw = action.payload;
         },
-        setAsWinner(state, action: PayloadAction<{ drawEntry: DrawEntry, prizeAmount: number, drawOrder: DrawOrder, isTest: boolean }>) {
+        setAsWinner(state, action: PayloadAction<{
+            drawEntry: DrawEntry,
+            prizeAmount: number,
+            drawOrder: DrawOrder,
+            isTest: boolean
+        }>) {
             const entryIndex = state.draw?.entries.findIndex(entry => entry.number === action.payload.drawEntry.number);
             if (entryIndex === undefined || entryIndex === -1) {
                 return;
@@ -36,8 +41,6 @@ export const currentDrawSlice = createSlice({
             if (!action.payload.isTest) {
                 return;
             }
-
-
         }
     }
 });

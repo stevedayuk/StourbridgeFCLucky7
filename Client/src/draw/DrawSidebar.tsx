@@ -3,13 +3,20 @@ import DrawPromo from "./DrawPromo.tsx";
 import Table from 'react-bootstrap/Table';
 import styles from './DrawSidebar.module.css';
 
-export default function DrawSidebar() {
+type DrawSidebarProps = {
+    isTest?: boolean;
+    drawMonthName: string | null;
+    drawYear: number | null;
+};
+
+export default function DrawSidebar(props: DrawSidebarProps) {
     const currentDraw = useAppSelector(state => state.currentDraw.draw);
 
     return <div className={styles.drawSidebar}>
         <div className={styles.drawWinners}>
-            <div className={"my-3"}>
-                <h1>THIS MONTH'S WINNERS</h1>
+            <div className={styles.drawWinnersHeader}>
+                {props.isTest && <h1>Test Draw Winners</h1>}
+                {!props.isTest && <h1>{props.drawMonthName} {props.drawYear} Winners</h1> }
             </div>
             <Table className={styles.winnersTable}>
                 <tbody>
