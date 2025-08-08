@@ -69,7 +69,7 @@ public class DrawService
 
         CurrentDrawInfoDto currentDrawInfo = await GetCurrentDrawInfoAsync();
         List<DrawEntryDto> drawEntriesList = await GetCurrentDrawEntriesAsync();
-        List<DrawWinnerDto> winnersList = await GetCurrentDrawPrizesAsync(drawOrder);
+        List<DrawWinnerDto> winnersList = await GetCurrentDrawPrizesAsync(drawOrder, drawEntriesList);
 
         CurrentDrawDto currentDraw = new CurrentDrawDto();
         currentDraw.DrawInfo = currentDrawInfo;
@@ -131,7 +131,7 @@ public class DrawService
         return drawEntriesList;
     }
 
-    private async Task<List<DrawWinnerDto>> GetCurrentDrawPrizesAsync(string drawOrder)
+    private async Task<List<DrawWinnerDto>> GetCurrentDrawPrizesAsync(string drawOrder, List<DrawEntryDto>? drawEntriesList = null)
     {
         List<PrizeLevel> prizeLevelsList =
             await _dataContext.PrizeLevels.AsNoTracking()
@@ -150,6 +150,18 @@ public class DrawService
                 .Include(p => p.PrizeLevel)
                 .Where(p => p.DrawId == currentDraw.DrawId)
                 .ToListAsync();
+
+            if (drawEntriesList is not null)
+            {
+                foreach(var currentDrawWinner in currentDrawWinnersList)
+                {
+                    var entry = drawEntriesList.FirstOrDefault(e => e.EntryId == currentDrawWinner.EntryId);
+                    if (entry is not null)
+                    {
+                        entry.IsWinner = true;
+                    }
+                }
+            }
         }
         
         List<DrawWinnerDto> drawPrizesList = new();

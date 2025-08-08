@@ -1,7 +1,7 @@
 .container {
     background-color: #f1f1f1;
     height: 1000px;
-    padding: 50px 50px 10px 50px;
+    padding: 0 50px;
 }
 
 .control {
@@ -31,6 +31,14 @@
 }
 
 .footer {
+    height: 180px;
+}
+
+.currentWinnerContainer {
+    height: 100px;
+}
+
+.currentWinner {
     align-items: center;
     background-color: #f1f1f1;
     background-color: rgba(241, 241, 241, 0.8);
@@ -38,7 +46,6 @@
     display: flex;
     font-size: 4rem;
     gap: 2rem;
-    height: 100px;
     padding: 0 1rem;
 }
 

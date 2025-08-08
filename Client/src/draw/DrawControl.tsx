@@ -120,34 +120,38 @@ export default function DrawControl(props: DrawControlProps) {
                     <span className={styles.drawingNumber}>{number}</span>
                 }
             </div>
-            {!isDrawing && currentWinner &&
-                <div className={styles.footer}>
-                    <div>
-                        £{currentWinningPrizeLevel?.prizeAmount}
-                    </div>
-                    <div className={"fw-bold"}>
-                        {currentWinner?.name ?? "Waiting for winner..."}
-                    </div>
+            <div className={styles.footer}>
+                <div className={styles.currentWinnerContainer}>
+                    {!isDrawing && currentWinner &&
+                        <div className={styles.currentWinner}>
+                            <div>
+                                £{currentWinningPrizeLevel?.prizeAmount}
+                            </div>
+                            <div className={"fw-bold"}>
+                                {currentWinner?.name ?? "Waiting for winner..."}
+                            </div>
+                        </div>
+                    }
                 </div>
-            }
-            <div className={styles.drawButtonContainer}>
-                {(!isDrawing && !isDrawComplete) &&
+                <div className={styles.drawButtonContainer}>
+                    {(!isDrawing && !isDrawComplete) &&
 
-                    <Button className={"w-100"}
-                            variant={"danger"}
-                            size={"lg"}
-                            onClick={() => drawNumber()}>
-                        Draw Number
-                    </Button>
-                }
-                {!isDrawing && isDrawComplete &&
-                    <Button className={"w-100"}
-                            variant={"danger"}
-                            size={"lg"}
-                            onClick={() => completeDraw()}>
-                        Complete Draw
-                    </Button>
-                }
+                        <Button className={"w-100"}
+                                variant={"danger"}
+                                size={"lg"}
+                                onClick={() => drawNumber()}>
+                            Draw Number
+                        </Button>
+                    }
+                    {!isDrawing && isDrawComplete &&
+                        <Button className={"w-100"}
+                                variant={"danger"}
+                                size={"lg"}
+                                onClick={() => completeDraw()}>
+                            Complete Draw
+                        </Button>
+                    }
+                </div>
             </div>
         </div>
     </div>
