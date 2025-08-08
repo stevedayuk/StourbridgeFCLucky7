@@ -1,0 +1,17 @@
+﻿services:
+  sfclucky7-api:
+    container_name: sfclucky7-api
+    restart: unless-stopped
+    build:
+      dockerfile: Dockerfile-Api
+      
+  sfclucky7-client:
+    container_name: sfclucky7-client
+    restart: unless-stopped
+    build:
+      dockerfile: Dockerfile-Client
+
+networks:
+  default:
+    external: true
+    name: npm

@@ -93,9 +93,9 @@ export default function DrawControl(props: DrawControlProps) {
                     setIsDrawComplete(true);
                 }
 
-                if (!currentDraw.isTest) {
+                if (!currentDraw.isTest && !currentDraw.drawInfo?.drawId) {
                     const setDrawWinner: SetDrawWinner = {
-                        drawId: currentDraw.drawInfo.drawId,
+                        drawId: currentDraw.drawInfo!.drawId!,
                         prizeLevelId: currentWinningPrizeLevel.prizeLevelId,
                         entryId: potentialWinner.entryId,
                     };
@@ -116,7 +116,7 @@ export default function DrawControl(props: DrawControlProps) {
     return <div className={styles.container}>
         <div className={styles.control}>
             <div className={styles.number}>
-                {(isDrawing || currentWinner) &&
+                {(isDrawing || currentWinner) && number > 0 &&
                     <span className={styles.drawingNumber}>{number}</span>
                 }
             </div>

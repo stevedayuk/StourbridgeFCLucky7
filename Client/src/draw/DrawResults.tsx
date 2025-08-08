@@ -22,7 +22,7 @@ export default function DrawResults(props: DrawResultsProps) {
             <div className={styles.drawResultsContent}>
                 <Table className={styles.winnersTable}>
                     <tbody>
-                    {currentDraw.winners.map((winner, index) => (
+                    {currentDraw?.winners.map((winner, index) => (
                         <tr key={index}>
                             <td className={styles.prizeAmountColumn}>
                                 <strong>£{winner.prizeAmount}</strong>

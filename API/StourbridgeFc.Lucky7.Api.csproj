@@ -5,9 +5,12 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <UserSecretsId>6cdb214b-d514-42ca-9404-9e67b718b1df</UserSecretsId>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.4.0" />
+        <PackageReference Include="Azure.Identity" Version="1.14.2" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.7"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.8">
           <PrivateAssets>all</PrivateAssets>
@@ -23,6 +26,12 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Data\StourbridgeFc.Lucky7.Data.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
     </ItemGroup>
 
 </Project>
