@@ -1,5 +1,5 @@
 import RegistrationForm from '../home/RegistrationForm.tsx';
-import styles from './Home.module.css';
+import styles from './HomePage.module.css';
 import RecentWinners from '../winners/RecentWinners.tsx';
 
 export default function HomePage() {

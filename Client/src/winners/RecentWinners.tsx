@@ -1,4 +1,4 @@
-import styles from '../pages/Home.module.css';
+import styles from '../pages/HomePage.module.css';
 
 export default function RecentWinners() {
   return (
