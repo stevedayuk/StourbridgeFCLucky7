@@ -1,4 +1,4 @@
-import qrCode from '../assets/images/applicationform-qrcode.jpg';
+import qrCode from '../assets/images/applicationform-qrcode.png';
 import styles from './DrawPromo.module.css';
 
 export default function DrawPromo() {
