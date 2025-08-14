@@ -93,7 +93,7 @@ export default function DrawControl(props: DrawControlProps) {
                     setIsDrawComplete(true);
                 }
 
-                if (!currentDraw.isTest && !currentDraw.drawInfo?.drawId) {
+                if (!currentDraw.isTest && currentDraw.drawInfo?.drawId) {
                     const setDrawWinner: SetDrawWinner = {
                         drawId: currentDraw.drawInfo!.drawId!,
                         prizeLevelId: currentWinningPrizeLevel.prizeLevelId,
