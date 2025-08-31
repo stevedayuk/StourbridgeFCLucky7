@@ -1,4 +1,4 @@
-import DrawHeader from "../../draw/DrawHeader.tsx";
+import AdminHeader from "../../admin/AdminHeader.tsx";
 
 import styles from './DrawPage.module.css';
 import DrawContent from "../../draw/DrawContent.tsx";
@@ -37,7 +37,7 @@ export default function DrawPage(props: DrawPageProps) {
     }
 
     return <div className={styles.page}>
-        <DrawHeader />
+        <AdminHeader mode={"draw"} />
         {!isDrawing && <StartDraw isTest={props.isTest} startDraw={startDraw} />}
         {isDrawing && !isDrawComplete && <DrawContent isTest={props.isTest} completeDraw={completeDraw} />}
         {isDrawComplete && <DrawResults drawMonthName={drawMonthName} drawYear={drawYear} />}

@@ -1,0 +1,72 @@
+.drawHeader {
+    align-items: center;
+    background-color: var(--sfc-red);
+    color: white;
+    display: flex;
+    justify-content: center;
+}
+
+.drawHeaderTitle {
+    align-items: center;
+    display: flex;
+    flex-grow: 1;
+    gap: 1rem;
+    justify-content: center;
+    padding: 0.5rem;
+}
+
+.drawHeaderLogo {
+    height: 50px;
+    width: 50px;
+}
+
+
+
+.drawHeaderUser {
+    cursor: pointer;
+    margin-left: auto;
+    padding: 1rem;
+}
+
+.userMenu {
+    background-color: #E80909;
+    width: 100%;
+}
+
+.userMenuHeader {
+    align-items: center;
+    background: #B70707;
+    background: linear-gradient(225deg, rgba(183, 7, 7, 1) 0%, rgba(255, 0, 0, 1) 100%);
+    border-bottom: 1px solid #990606;
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.userMenu > ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.userMenu > ul > li > a {
+    align-items: center;
+    border-bottom: 1px solid #990606;
+    color: white;
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    text-decoration: none;
+}
+
+.userMenu > ul > li > a:hover {
+    background-color: var(--sfc-red);
+}
+
+@media (min-width: 576px) {
+    .userMenu {
+        right: 0;
+        position: absolute;
+        width: 300px;
+    }
+}

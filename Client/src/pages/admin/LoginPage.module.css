@@ -1,0 +1,14 @@
+.loginContainer {
+
+}
+
+.unauthorisedUseMessage {
+    margin-top: 1rem;
+}
+
+@media (min-width: 768px) {
+    .loginContainer {
+        margin: 1rem auto;
+        width: 600px;
+    }
+}
