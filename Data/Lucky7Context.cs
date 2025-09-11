@@ -32,5 +32,11 @@ public class Lucky7Context : DbContext
             .HasOne(p => p.PrizeLevel)
             .WithMany(p => p.DrawWinners)
             .OnDelete(DeleteBehavior.Restrict);
+        
+        // Entry
+        
+        modelBuilder.Entity<Entry>()
+            .Property(p => p.DateTimeAddedUtc)
+            .HasDefaultValueSql("now() at time zone 'utc' ");
     }
 }

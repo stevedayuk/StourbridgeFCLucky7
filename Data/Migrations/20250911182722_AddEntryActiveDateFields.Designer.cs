@@ -2,18 +2,21 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using StourbridgeFc.Lucky7.Data;
 
 #nullable disable
 
-namespace StourbridgeFC.Lucky7.Data.Migrations
+namespace StourbridgeFc.Lucky7.Data.Migrations
 {
     [DbContext(typeof(Lucky7Context))]
-    partial class Lucky7ContextModelSnapshot : ModelSnapshot
+    [Migration("20250911182722_AddEntryActiveDateFields")]
+    partial class AddEntryActiveDateFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -109,16 +112,6 @@ namespace StourbridgeFC.Lucky7.Data.Migrations
                     b.Property<DateOnly?>("ActiveTo")
                         .HasColumnType("date")
                         .HasColumnName("active_to");
-
-                    b.Property<DateTime>("DateTimeAddedUtc")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("date_time_added_utc")
-                        .HasDefaultValueSql("now() at time zone 'utc' ");
-
-                    b.Property<DateTime?>("DateTimeLastUpdatedUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("date_time_last_updated_utc");
 
                     b.Property<string>("Name")
                         .IsRequired()
