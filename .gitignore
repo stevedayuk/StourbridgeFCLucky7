@@ -3,4 +3,4 @@ node_modules/
 **/.idea
 **/artifacts
 **/bin
-**/obj
+**/obj!/compose.yaml
