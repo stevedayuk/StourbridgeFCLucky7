@@ -1,6 +1,6 @@
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
-import {get} from "../util/http.ts";
+import { ApiService } from "../services/apiService.ts";
 import type {CurrentDrawInfo} from "../types/CurrentDrawInfo.ts";
 import styles from './StartDraw.module.css';
 import {useEffect, useState} from "react";
@@ -16,8 +16,8 @@ export default function StartDraw(props: ExportFormProps) {
     const [currentDrawMonthName, setCurrentDrawMonthName] = useState('');
 
     async function populateCurrentDrawInfo() {
-        const apiUrl = import.meta.env.VITE_API_URL + "/draws/current-info";
-        const currentDrawInfo = (await get(apiUrl) as CurrentDrawInfo);
+        const endpointUrl = "/draws/current-info";
+        const currentDrawInfo = await ApiService.get<CurrentDrawInfo>(endpointUrl);
 
         const currentDrawDate = new Date(currentDrawInfo.drawYear, currentDrawInfo.drawMonth - 1, 1);
         setDrawInfo(currentDrawInfo);

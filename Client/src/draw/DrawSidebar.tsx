@@ -1,5 +1,5 @@
 import {useAppSelector} from "../store/hooks.ts";
-import DrawPromo from "./DrawPromo.tsx";
+// import DrawPromo from "./DrawPromo.tsx";
 import Table from 'react-bootstrap/Table';
 import styles from './DrawSidebar.module.css';
 
@@ -35,7 +35,7 @@ export default function DrawSidebar(props: DrawSidebarProps) {
             </Table>
         </div>
         <div className={styles.drawPromo}>
-            <DrawPromo />
+            {/*<DrawPromo />*/}
         </div>
     </div>
 }

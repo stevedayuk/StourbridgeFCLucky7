@@ -3,7 +3,7 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Table from 'react-bootstrap/Table';
 import styles from './DrawResults.module.css';
-import DrawPromo from "./DrawPromo.tsx";
+// import DrawPromo from "./DrawPromo.tsx";
 
 type DrawResultsProps = {
     drawMonthName: string | null;
@@ -38,7 +38,7 @@ export default function DrawResults(props: DrawResultsProps) {
         <Row>
             <Col xs={7}></Col>
             <Col xs={5}>
-                <DrawPromo />
+                {/*<DrawPromo />*/}
             </Col>
         </Row>
     </div>

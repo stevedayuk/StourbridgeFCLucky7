@@ -5,8 +5,9 @@ import DrawContent from "../../draw/DrawContent.tsx";
 import StartDraw from "../../draw/StartDraw.tsx";
 import {useState} from "react";
 import type {CurrentDrawInfo} from "../../types/CurrentDrawInfo.ts";
-import {post} from "../../util/http.ts";
+import { ApiService } from '../../services/apiService.ts';
 import DrawResults from "../../draw/DrawResults.tsx";
+import {Container} from "react-bootstrap";
 
 type DrawPageProps = {
     isTest?: boolean;
@@ -24,8 +25,8 @@ export default function DrawPage(props: DrawPageProps) {
             return;
         }
 
-        const apiUrl = import.meta.env.VITE_API_URL + "/draws/start";
-        await post(apiUrl, currentDrawInfo);
+        const endpointUrl = "/draws/start";
+        await ApiService.post(endpointUrl, currentDrawInfo);
 
         setIsDrawing(true);
     }
@@ -36,10 +37,14 @@ export default function DrawPage(props: DrawPageProps) {
         setIsDrawComplete(true);
     }
 
-    return <div className={styles.page}>
-        <AdminHeader mode={"draw"} />
-        {!isDrawing && <StartDraw isTest={props.isTest} startDraw={startDraw} />}
-        {isDrawing && !isDrawComplete && <DrawContent isTest={props.isTest} completeDraw={completeDraw} />}
-        {isDrawComplete && <DrawResults drawMonthName={drawMonthName} drawYear={drawYear} />}
-    </div>
+    return (<>
+        <div className={styles.page}>
+            <Container fluid>
+                <AdminHeader mode={"draw"} />
+                {!isDrawing && <StartDraw isTest={props.isTest} startDraw={startDraw} />}
+                {isDrawing && !isDrawComplete && <DrawContent isTest={props.isTest} completeDraw={completeDraw} />}
+                {isDrawComplete && <DrawResults drawMonthName={drawMonthName} drawYear={drawYear} />}
+            </Container>
+        </div>
+    </>)
 }

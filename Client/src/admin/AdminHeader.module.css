@@ -61,6 +61,7 @@
 
 .userMenu > ul > li > a:hover {
     background-color: var(--sfc-red);
+    cursor: pointer;
 }
 
 @media (min-width: 576px) {

@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button'
 import {setAsWinner} from "../store/current-draw-slice.ts";
 import type {DrawEntry} from "../types/DrawEntry.ts";
 import type {DrawWinner} from "../types/DrawWinner.ts";
-import {post, put} from "../util/http.ts";
+import { ApiService } from '../services/apiService.ts';
 import type {SetDrawWinner} from "../types/SetDrawWinner.ts";
 
 type DrawControlProps = {
@@ -81,13 +81,13 @@ export default function DrawControl(props: DrawControlProps) {
                 const unnamedWinners = currentDraw.winners.filter(winner => !winner.name);
                 if (unnamedWinners.length === 1) {
                     if (!currentDraw.isTest) {
-                        const apiUrl = import.meta.env.VITE_API_URL + "/draws/complete";
+                        const endpointUrl = "/draws/complete";
                         const body = {
                             drawMonth: currentDraw.drawInfo!.drawMonth,
                             drawYear: currentDraw.drawInfo!.drawYear,
                         }
 
-                        await put(apiUrl, body);
+                        await ApiService.put(endpointUrl, body);
                     }
 
                     setIsDrawComplete(true);
@@ -100,8 +100,8 @@ export default function DrawControl(props: DrawControlProps) {
                         entryId: potentialWinner.entryId,
                     };
 
-                    const apiUrl = import.meta.env.VITE_API_URL + "/draws/set-winner";
-                    await post(apiUrl, setDrawWinner)
+                    const endpointUrl = "/draws/set-winner";
+                    await ApiService.post(endpointUrl, setDrawWinner)
                 }
             }
         }, interval);

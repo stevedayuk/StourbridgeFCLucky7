@@ -2,7 +2,7 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import {useAppDispatch} from "../store/hooks.ts";
 import {useEffect, useState} from "react";
-import {get} from "../util/http.ts";
+import { ApiService } from "../services/apiService.ts";
 import type {CurrentDraw} from "../types/CurrentDraw.ts";
 import {populateDrawEntries} from "../store/current-draw-slice.ts";
 import DrawControl from "./DrawControl.tsx";
@@ -19,10 +19,10 @@ export default function DrawContent(props: DrawContentProps) {
     const dispatch = useAppDispatch();
 
     async function populateCurrentDraw() {
-        const apiUrl = props.isTest
-            ? import.meta.env.VITE_API_URL + "/draws/test"
-            : import.meta.env.VITE_API_URL + "/draws/current";
-        const currentDraw = (await get(apiUrl)) as CurrentDraw;
+        const endpointUrl = props.isTest
+            ? "/draws/test"
+            : "/draws/current";
+        const currentDraw = await ApiService.get<CurrentDraw>(endpointUrl);
 
         if (!currentDraw.isTest && currentDraw.drawInfo) {
             const currentDrawDate = new Date(currentDraw.drawInfo.drawYear, currentDraw.drawInfo.drawMonth - 1, 1);

@@ -2,6 +2,7 @@ using System.Text;
 using ClosedXML.Excel;
 using Microsoft.EntityFrameworkCore;
 using StourbridgeFc.Lucky7.Api.DataTransferObjects;
+using StourbridgeFc.Lucky7.Api.Extensions;
 using StourbridgeFc.Lucky7.Data;
 using StourbridgeFc.Lucky7.Data.Models;
 
@@ -87,24 +88,66 @@ public class EntryService
 
     private string GetEntryName(string spreadsheetEntryName, string pascalCaseNameOrder, string upperCaseNameOrder)
     {
-        bool isUpperCase = spreadsheetEntryName.All(c => char.IsUpper(c) || char.IsWhiteSpace(c));
+        bool isUpperCase = spreadsheetEntryName.RemoveSpecialCharacters()
+            .All(c => char.IsUpper(c) || char.IsWhiteSpace(c));
 
         switch (isUpperCase)
         {
             case true when upperCaseNameOrder == OptionConstants.NameOrderSurnameFirst:
             case false when pascalCaseNameOrder == OptionConstants.NameOrderSurnameFirst:
-                string[] splitName = spreadsheetEntryName.Split(' ');
+                spreadsheetEntryName = spreadsheetEntryName.Replace(" - ", "-");
+                
+                string[] splitName = spreadsheetEntryName.Split([' '], StringSplitOptions.None);
                 StringBuilder entryName = new();
-
-                foreach (var namePart in splitName[1..])
+                List<string> bracketedParts = new();
+                List<string> multiplePrefixedParts = new();
+                List<string> nameParts = new();
+                
+                // First collect non-bracketed parts (excluding the first and last name)
+                foreach(var namePart in splitName)
                 {
-                    entryName.Append($"{namePart} ");
+                    if (namePart.StartsWith("(") && namePart.EndsWith(")"))
+                    {
+                        bracketedParts.Add(namePart);
+                    }
+                    else if (spreadsheetEntryName.Contains($"  {namePart}"))
+                    {
+                        multiplePrefixedParts.Add(namePart);
+                    }
+                    else
+                    {
+                        nameParts.Add(namePart);
+                    }
+                }
+
+                if (nameParts.Count is 1)
+                {
+                    entryName.Append($"{nameParts[0]} ");
+                }
+                else
+                {
+                    entryName.Append($"{nameParts[^1]} ");
+
+                    for (int i = 0; i < nameParts.Count - 1; i++)
+                    {
+                        entryName.Append($"{nameParts[i]} ");   
+                    }
                 }
                 
-                entryName.Append($"{splitName[0]} ");
-
+                // Add any bracketed parts at the end
+                foreach (var bracketedPart in bracketedParts)
+                {
+                    entryName.Append($"{bracketedPart} ");
+                }
+                
+                // Add any parts that had multiple spaces prefix
+                foreach (var multiplePrefixedPart in multiplePrefixedParts)
+                {
+                    entryName.Append($"{multiplePrefixedPart} ");
+                }
+                
                 entryName.Length -= 1;
-
+                
                 return entryName.ToString().ToUpper();
             case true when upperCaseNameOrder == OptionConstants.NameOrderAsEntered:
             case false when pascalCaseNameOrder == OptionConstants.NameOrderAsEntered:

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StourbridgeFc.Lucky7.Api.DataTransferObjects;
 using StourbridgeFc.Lucky7.Api.Services;
@@ -6,6 +7,7 @@ namespace StourbridgeFc.Lucky7.Api.Controllers;
 
 [Route("entries")]
 [ApiController]
+[Authorize]
 public class EntryController : ControllerBase
 {
     private readonly EntryService _entryService;

@@ -1,5 +1,5 @@
 import {Container, Form} from "react-bootstrap";
-import {useRef} from "react";
+import {useEffect, useRef} from "react";
 import Button from "react-bootstrap/Button";
 import {auth} from "../../firebase.ts";
 import styles from './LoginPage.module.css';
@@ -36,6 +36,20 @@ export default function LoginPage() {
             console.error("Error logging in:", error);
         }
     }
+
+    function checkIsLoggedIn() {
+        if (user) {
+            if (redirectUrl) {
+                window.location.href = redirectUrl;
+            } else {
+                window.location.href = "/admin";
+            }
+        }
+    }
+
+    useEffect(() => {
+        checkIsLoggedIn();
+    })
 
     return (
         <Container className={styles.loginContainer}>

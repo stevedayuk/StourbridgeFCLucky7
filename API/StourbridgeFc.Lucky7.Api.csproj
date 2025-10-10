@@ -9,9 +9,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.4.0" />
-        <PackageReference Include="Azure.Identity" Version="1.16.0" />
         <PackageReference Include="ClosedXML" Version="0.105.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.0-rc.1.25451.107" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0-rc.1.25451.107" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.0-rc.1.25451.107">
           <PrivateAssets>all</PrivateAssets>
@@ -22,7 +21,7 @@
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0-rc.1" />
-        <PackageReference Include="Scalar.AspNetCore" Version="2.8.1" />
+        <PackageReference Include="Scalar.AspNetCore" Version="2.8.11" />
     </ItemGroup>
 
     <ItemGroup>
@@ -30,9 +29,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
       <Content Remove="global.json" />
     </ItemGroup>
 

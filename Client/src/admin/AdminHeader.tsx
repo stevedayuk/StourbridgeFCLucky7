@@ -35,7 +35,7 @@ export default function AdminHeader(props: AdminHeaderProps) {
                         <h1>STOURBRIDGE FC - LUCKY 7</h1>
                     </div>
                 </div>
-                {props.mode === "admin" && <div className={styles.drawHeaderUser}>
+                {props.mode === "admin" && user && <div className={styles.drawHeaderUser}>
                     <FontAwesomeIcon icon={faUser} size={"2xl"} onClick={toggleUserMenuVisibility}/>
                 </div>}
             </header>
@@ -46,11 +46,11 @@ export default function AdminHeader(props: AdminHeaderProps) {
                     </div>
                     <div>
                         <div>
-                            <strong>{user.displayName ?? 'Stourbridge FC User'}</strong>
+                            <strong>{user.displayName ?? user.email}</strong>
                         </div>
-                        <div>
+                        {user.displayName && <div>
                             {user.email}
-                        </div>
+                        </div> }
                     </div>
                 </div>
                 <ul>

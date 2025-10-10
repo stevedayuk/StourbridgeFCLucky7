@@ -1,5 +1,7 @@
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 using StourbridgeFc.Lucky7.Api.Services;
 using StourbridgeFc.Lucky7.Data;
@@ -8,15 +10,6 @@ var builder = WebApplication.CreateBuilder(args);
 var lucky7Origins = "_lucky7Origins";
 
 // Add services to the container.
-
-// Add Azure Key Vault to configuration
-if (builder.Environment.IsDevelopment() is false)
-{
-    builder.Configuration.AddAzureKeyVault(builder.Configuration["KeyVaultName"]!,
-        builder.Configuration["AzureAdApplicationId"]!, builder.Configuration["AzureAdCertThumbprint"]!,
-        builder.Configuration["AzureAdDirectoryId"]!);
-}
-
 builder.Services.AddControllers()
     .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -30,11 +23,28 @@ builder.Services.AddDbContextPool<Lucky7Context>(options =>
 
 builder.Services.AddApiServices();
 
+// Configure Firebase Authentication
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.Authority = builder.Configuration["Firebase:Authority"];
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = builder.Configuration["Firebase:Authority"],
+            ValidateAudience = true,
+            ValidAudience = builder.Configuration["Firebase:Audience"],
+            ValidateLifetime = true
+        };
+    });
+
+builder.Services.AddAuthorization();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(lucky7Origins, policy =>
     {
-        policy.WithOrigins("https://sfclucky7.app", "https://r2.sfclucky7.app", "http://localhost:5173")
+        policy.WithOrigins("https://stourbridgefclucky7.com", "https://www.stourbridgefclucky7.com", "http://localhost:5173")
             .WithMethods("GET", "POST", "PUT", "DELETE")
             .WithHeaders("Authorization", "Content-Type")
             .AllowCredentials();
@@ -54,6 +64,7 @@ app.UseCors(lucky7Origins);
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

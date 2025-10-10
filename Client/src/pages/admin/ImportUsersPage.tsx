@@ -1,20 +1,28 @@
 import {Container, InputGroup, Spinner} from "react-bootstrap";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {getFileNameWithExt} from "../../util/files.ts";
 import Button from "react-bootstrap/Button";
-import {postForm, put} from "../../util/http.ts";
+import { ApiService } from "../../services/apiService.ts";
 import type {ParsedDrawEntry} from "../../types/ParsedDrawEntry.ts";
 import {ParsedDrawItemsGroup} from "../../admin/ParsedDrawItemsGroup.tsx";
 import styles from './ImportUsersPage.module.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faScroll, faUpload } from "@fortawesome/free-solid-svg-icons";
+import type {CurrentDrawInfo} from "../../types/CurrentDrawInfo.ts";
 
 export default function ImportUsersPage() {
+    const [drawInfo, setDrawInfo] = useState<CurrentDrawInfo | null>(null);
     const [updateUsersError, setUpdateUsersError] = useState<string | null>(null);
     const [file, setFile] = useState<File | null>(null);
     const [isParsingUploadFile, setIsParsingUploadFile] = useState(false);
     const [isUpdatingUsers, setIsUpdatingUsers] = useState(false);
     const [parsedDrawEntries, setParsedDrawEntries] = useState<ParsedDrawEntry[]>([]);
+
+    async function populateCurrentDrawInfo() {
+        const endpointUrl = "/draws/current-info";
+        const currentDrawInfo = await ApiService.get<CurrentDrawInfo>(endpointUrl);
+        setDrawInfo(currentDrawInfo);
+    }
 
     function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
         if (event.target.files) {
@@ -36,8 +44,12 @@ export default function ImportUsersPage() {
         const formData = new FormData();
         formData.append('file', file!);
 
-        const apiUrl = import.meta.env.VITE_API_URL + "/entries/parse-process-from-spreadsheet?drawMonth=9&drawYear=2025";
-        const parsedDrawEntries = (await postForm(apiUrl, formData)) as ParsedDrawEntry[];
+        if (drawInfo == null) {
+            throw new Error("Draw info not set");
+        }
+
+        const endpointUrl = `/entries/parse-process-from-spreadsheet?drawMonth=${drawInfo.drawMonth}&drawYear=${drawInfo.drawYear}`;
+        const parsedDrawEntries = await ApiService.postFormData<ParsedDrawEntry[]>(endpointUrl, formData);
         setParsedDrawEntries(parsedDrawEntries);
         setIsParsingUploadFile(false);
     }
@@ -45,10 +57,10 @@ export default function ImportUsersPage() {
     async function handleUpdateUsers() {
         setIsUpdatingUsers(true);
 
-        const apiUrl = import.meta.env.VITE_API_URL + "/entries/update-entries";
+        const endpointUrl = "/entries/update-entries";
 
         try {
-            await put(apiUrl, parsedDrawEntries);
+            await ApiService.put(endpointUrl, parsedDrawEntries);
 
         } catch(error) {
             setUpdateUsersError((error as Error).message);
@@ -70,6 +82,14 @@ export default function ImportUsersPage() {
                 </div>
             </Container>
         )
+    }
+
+    useEffect(() => {
+        populateCurrentDrawInfo();
+    }, []);
+
+    if (!drawInfo) {
+        return <Spinner />;
     }
 
     return (
