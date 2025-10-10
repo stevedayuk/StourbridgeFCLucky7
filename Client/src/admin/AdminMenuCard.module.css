@@ -1,0 +1,22 @@
+.adminMenuCard {
+
+}
+
+.adminMenuCard a {
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.adminMenuCardHeader {
+    background: var(--sfc-red);
+    color: white;
+    font-size: 1.5rem;
+    padding: 0.5rem;
+}
+
+.adminMenuCardImage {
+    background-position: center center;
+    background-size: cover;
+    height: 400px;
+
+}

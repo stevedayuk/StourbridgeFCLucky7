@@ -7,6 +7,8 @@ import PrivateRoutes from "./PrivateRoutes.tsx";
 import LoginPage from "../pages/admin/LoginPage.tsx";
 import AdminHomePage from "../pages/admin/AdminHomePage.tsx";
 import AdminLayout from "../layouts/AdminLayout.tsx";
+import UsersPage from "../pages/admin/UsersPage.tsx";
+import ImportUsersPage from "../pages/admin/ImportUsersPage.tsx";
 
 export default function Routes() {
     const router = createBrowserRouter([
@@ -26,7 +28,9 @@ export default function Routes() {
                         },
                         {
                             path: '', element: <PrivateRoutes/>, children: [
-                                {path: '', element: <AdminHomePage />}
+                                {path: '', element: <AdminHomePage />},
+                                {path: 'users', element: <UsersPage/>},
+                                {path: 'users/import', element: <ImportUsersPage />}
                             ]
                         }
                     ]

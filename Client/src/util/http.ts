@@ -24,6 +24,22 @@ export async function post(url: string, body: unknown) {
     return response.json() as unknown;
 }
 
+export async function postForm(url: string, body: FormData) {
+    const response = await fetch(url, {
+        method: 'POST',
+        // headers: {
+        //     "Content-Type": "multipart/form-data"
+        // },
+        body: body
+    });
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return response.json() as unknown;
+}
+
 export async function put(url: string, body: unknown) {
     const response = await fetch(url, {
         method: 'PUT',
