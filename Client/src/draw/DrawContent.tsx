@@ -40,7 +40,7 @@ export default function DrawContent(props: DrawContentProps) {
 
     return <>
         <div className={styles.container}>
-            <Row className={"h-100"}>
+            <Row className={"g-0 h-100"}>
                 <Col xs={7}>
                     <DrawControl completeDraw={() => props.completeDraw(currentDrawMonthName!, currentDraw!)} />
                 </Col>
