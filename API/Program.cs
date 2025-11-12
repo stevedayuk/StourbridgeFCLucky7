@@ -15,9 +15,11 @@ builder.Services.AddControllers()
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+string databaseConnectionStringKey = builder.Environment.IsDevelopment() ? "SfcLucky7Dev" : "SfcLucky7";
+
 builder.Services.AddDbContextPool<Lucky7Context>(options =>
 {
-    options.UseNpgsql(builder.Configuration.GetConnectionString("SfcLucky7"))
+    options.UseNpgsql(builder.Configuration.GetConnectionString(databaseConnectionStringKey))
         .UseSnakeCaseNamingConvention();
 });
 

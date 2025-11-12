@@ -7,6 +7,7 @@ import type {CurrentDraw} from "../types/CurrentDraw.ts";
 import {populateDrawEntries} from "../store/current-draw-slice.ts";
 import DrawControl from "./DrawControl.tsx";
 import DrawSidebar from "./DrawSidebar.tsx";
+import styles from "./DrawContent.module.css";
 
 type DrawContentProps = {
     completeDraw: (drawMonthName: string, drawYear: number) => void;
@@ -38,8 +39,8 @@ export default function DrawContent(props: DrawContentProps) {
     }, []);
 
     return <>
-        <div>
-            <Row>
+        <div className={styles.container}>
+            <Row className={"g-0 h-100"}>
                 <Col xs={7}>
                     <DrawControl completeDraw={() => props.completeDraw(currentDrawMonthName!, currentDraw!)} />
                 </Col>

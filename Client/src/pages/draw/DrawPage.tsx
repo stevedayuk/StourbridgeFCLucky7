@@ -7,7 +7,6 @@ import {useState} from "react";
 import type {CurrentDrawInfo} from "../../types/CurrentDrawInfo.ts";
 import { ApiService } from '../../services/apiService.ts';
 import DrawResults from "../../draw/DrawResults.tsx";
-import {Container} from "react-bootstrap";
 
 type DrawPageProps = {
     isTest?: boolean;
@@ -39,12 +38,10 @@ export default function DrawPage(props: DrawPageProps) {
 
     return (<>
         <div className={styles.page}>
-            <Container fluid>
-                <AdminHeader mode={"draw"} />
-                {!isDrawing && <StartDraw isTest={props.isTest} startDraw={startDraw} />}
-                {isDrawing && !isDrawComplete && <DrawContent isTest={props.isTest} completeDraw={completeDraw} />}
-                {isDrawComplete && <DrawResults drawMonthName={drawMonthName} drawYear={drawYear} />}
-            </Container>
+            <AdminHeader mode={"draw"} />
+            {!isDrawing && <StartDraw isTest={props.isTest} startDraw={startDraw} />}
+            {isDrawing && !isDrawComplete && <DrawContent isTest={props.isTest} completeDraw={completeDraw} />}
+            {isDrawComplete && <DrawResults drawMonthName={drawMonthName} drawYear={drawYear} />}
         </div>
     </>)
 }
