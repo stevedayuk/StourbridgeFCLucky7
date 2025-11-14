@@ -34,9 +34,13 @@ public class Lucky7Context : DbContext
             .OnDelete(DeleteBehavior.Restrict);
         
         // Entry
-        
-        modelBuilder.Entity<Entry>()
-            .Property(p => p.DateTimeAddedUtc)
-            .HasDefaultValueSql("now() at time zone 'utc' ");
+
+        modelBuilder.Entity<Entry>(entity =>
+        {
+            entity.Property(e => e.Id)
+                .ValueGeneratedOnAdd();
+            
+            entity.Property(e => e.DateTimeAddedUtc).HasDefaultValueSql("now() at time zone 'utc' ");
+        });
     }
 }

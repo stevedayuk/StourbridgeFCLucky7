@@ -55,9 +55,13 @@ export default function ImportUsersPage() {
     }
 
     async function handleUpdateUsers() {
+        if (drawInfo == null) {
+            throw new Error("Draw info not set");
+        }
+
         setIsUpdatingUsers(true);
 
-        const endpointUrl = "/entries/update-entries";
+        const endpointUrl = `/entries/update-entries?drawMonth=${drawInfo.drawMonth}&drawYear=${drawInfo.drawYear}`;
 
         try {
             await ApiService.put(endpointUrl, parsedDrawEntries);

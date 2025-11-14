@@ -68,7 +68,8 @@ public class DrawService
                            OptionConstants.DrawOrderLowestFirst;
 
         CurrentDrawInfoDto currentDrawInfo = await GetCurrentDrawInfoAsync();
-        List<DrawEntryDto> drawEntriesList = await GetCurrentDrawEntriesAsync();
+        List<DrawEntryDto> drawEntriesList =
+            await GetCurrentDrawEntriesAsync(currentDrawInfo.DrawMonth, currentDrawInfo.DrawYear);
         List<DrawWinnerDto> winnersList = await GetCurrentDrawPrizesAsync(drawOrder, drawEntriesList);
 
         CurrentDrawDto currentDraw = new CurrentDrawDto();
@@ -117,9 +118,12 @@ public class DrawService
         return currentDrawInfo;
     }
     
-    private async Task<List<DrawEntryDto>> GetCurrentDrawEntriesAsync()
+    private async Task<List<DrawEntryDto>> GetCurrentDrawEntriesAsync(int drawMonth, int drawYear)
     {
+        DateOnly drawDate = new(drawYear, drawMonth, 1);
+        
         List<DrawEntryDto> drawEntriesList = await _dataContext.Entries.AsNoTracking()
+            .Where(p => p.ActiveFrom <= drawDate && p.ActiveTo == null)
             .Select(p => new DrawEntryDto
             {
                 EntryId = p.Id,
@@ -229,7 +233,9 @@ public class DrawService
         string drawOrder = options.FirstOrDefault(p => p.Name == OptionConstants.DrawOrder)?.Value ??
                            OptionConstants.DrawOrderLowestFirst;
         
-        List<DrawEntryDto> drawEntriesList = await GetCurrentDrawEntriesAsync();
+        CurrentDrawInfoDto currentDrawInfo = await GetCurrentDrawInfoAsync();
+        List<DrawEntryDto> drawEntriesList =
+            await GetCurrentDrawEntriesAsync(currentDrawInfo.DrawMonth, currentDrawInfo.DrawYear);
         List<DrawWinnerDto> winnersList = await GetCurrentDrawPrizesAsync(drawOrder);
 
         CurrentDrawDto currentDraw = new CurrentDrawDto();
