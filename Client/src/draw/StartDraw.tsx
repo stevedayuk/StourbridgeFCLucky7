@@ -49,7 +49,7 @@ export default function StartDraw(props: ExportFormProps) {
         </div>}
 
         {!props.isTest && !drawInfo.inProgress && <div>
-            <h1>Start New Draw</h1>
+            <AdminTextHeader backHref={"/admin"} title={"Start New Draw"} />
             <p>You're about to start a new draw for {currentDrawMonthName} {drawInfo.drawYear}.</p>
             <Alert variant={"warning"}>
                 After selecting 'Start Draw' below, don't forget to go into Full Screen mode before displaying the draw screen to the public.
