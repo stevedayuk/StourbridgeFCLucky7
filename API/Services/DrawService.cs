@@ -134,14 +134,46 @@ public class DrawService
 
         return drawEntriesList;
     }
-
-    private async Task<List<DrawWinnerDto>> GetCurrentDrawPrizesAsync(string drawOrder, List<DrawEntryDto>? drawEntriesList = null)
+    
+    private async Task<List<PrizeLevel>> GetPrizeLevelsListAsync()
     {
         List<PrizeLevel> prizeLevelsList =
             await _dataContext.PrizeLevels.AsNoTracking()
                 .Where(p => p.IsActive == true)
                 .OrderByDescending(p => p.Amount)
                 .ToListAsync();
+        
+        return prizeLevelsList;
+    }
+
+    private async Task<List<DrawWinnerDto>> GetTestDrawPrizesAsync(string drawOrder)
+    {
+        List<PrizeLevel> prizeLevelsList = await GetPrizeLevelsListAsync();
+        
+        List<DrawWinnerDto> drawPrizesList = new();
+        
+        foreach (PrizeLevel prizeLevel in prizeLevelsList)
+        {
+            int totalWinners = prizeLevel.Winners;
+        
+            for (int c = 0; c < totalWinners; c++)
+            {
+                DrawWinnerDto drawPrize = new DrawWinnerDto
+                {
+                    PrizeLevelId = prizeLevel.Id,
+                    PrizeAmount = prizeLevel.Amount
+                };
+        
+                drawPrizesList.Add(drawPrize);
+            }
+        }
+
+        return drawPrizesList;
+    }
+
+    private async Task<List<DrawWinnerDto>> GetCurrentDrawPrizesAsync(string drawOrder, List<DrawEntryDto>? drawEntriesList = null)
+    {
+        List<PrizeLevel> prizeLevelsList = await GetPrizeLevelsListAsync();
 
         CurrentDrawInfoDto currentDraw = await GetCurrentDrawInfoAsync();
         List<DrawWinner> currentDrawWinnersList = [];
@@ -236,7 +268,7 @@ public class DrawService
         CurrentDrawInfoDto currentDrawInfo = await GetCurrentDrawInfoAsync();
         List<DrawEntryDto> drawEntriesList =
             await GetCurrentDrawEntriesAsync(currentDrawInfo.DrawMonth, currentDrawInfo.DrawYear);
-        List<DrawWinnerDto> winnersList = await GetCurrentDrawPrizesAsync(drawOrder);
+        List<DrawWinnerDto> winnersList = await GetTestDrawPrizesAsync(drawOrder);
 
         CurrentDrawDto currentDraw = new CurrentDrawDto();
         currentDraw.IsTest = true;
