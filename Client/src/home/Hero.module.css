@@ -1,0 +1,73 @@
+.container {
+    background-image: url('/images/site-hero.webp');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: var(--hero-height);
+    position: relative;
+    width: 100%;
+    z-index: 100;
+}
+
+.overlay {
+    background-color: var(--sfc-logo-bg);
+    height: var(--hero-height);
+    opacity: 0.5;
+    position: absolute;
+    width: 100%;
+    z-index: 101;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    height: var(--hero-height);
+    position: absolute;
+    width: 100%;
+    z-index: 102;
+}
+
+.header {
+    background-color: var(--sfc-logo-bg);
+    flex-basis: 50px;
+    height: 50px;
+}
+
+.bannerContainer {
+    display: flex;
+    flex: 1;
+    justify-content: flex-start;
+    padding: 5rem;
+}
+
+.banner {
+    background-color: var(--sfc-logo-bg);
+    color: white;
+    margin: auto 0;
+    padding: 2rem;
+}
+
+.bannerHeader {
+    display: flex;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+}
+
+.bannerHeader > img {
+    height: 200px;
+    width: 200px;
+}
+
+.bannerPromo {
+    display: flex;
+    font-size: 2rem;
+    justify-content: center;
+}
+
+.bannerText {
+    display: flex;
+    flex-direction: column;
+    font-size: 3rem;
+    font-weight: bold;
+    justify-content: center;
+}

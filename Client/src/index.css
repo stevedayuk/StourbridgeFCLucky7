@@ -1,11 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Goldman:wght@400;700&family=Oswald:wght@200..700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
 
 :root {
+    --hero-height: 70vh;
     --sfc-red: #b70707;
+    --sfc-logo-bg: #db0c1f;
 }
 
 body {
-    font-family: 'Oswald', sans-serif;
+    font-family: 'Goldman', sans-serif;
     margin: 0;
     padding: 0;
+}
+
+.container2 {
+    margin: 0 auto;
+    padding: 0 2rem;
 }

@@ -53,7 +53,7 @@ export default function RegistrationForm() {
           body: JSON.stringify(payload),
         });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        setSubmitted({ ok: true, message: 'Thanks! You\'re registered for the next draw. We\'ll be in touch.' });
+        setSubmitted({ ok: true, message: 'Thanks! Your details have been sent. We\'ll be in touch to confirm your registration.' });
       } else {
         // Fallback: store locally and simulate success
         const key = 'lucky7_registrations';
@@ -151,7 +151,7 @@ export default function RegistrationForm() {
 
       <div style={{ marginTop: 12 }}>
         <button type="submit" disabled={!canSubmit}>
-          {submitting ? 'Submitting…' : 'Register for the next draw'}
+          {submitting ? 'Submitting…' : 'Register'}
         </button>
       </div>
 

@@ -2,6 +2,7 @@
   --content-width: 1100px;
   --club-red: #c40b0b;
   --club-red-dark: #950808;
+  --club-red-logo: #db0c1f;
   --ink: #111111;
   --muted: #666a6d;
   --surface: #ffffff;
@@ -120,7 +121,7 @@
 .formBlock { margin-top: 1.25rem; }
 .formBlock h3 { margin-top: 0; }
 
-/* Theming the embedded RegistrationForm */
+/* Theming the embedded RegistrationForm2 */
 .formBlock :where(form) { max-width: 560px; }
 .formBlock :where(label) { display: block; font-weight: 600; margin: 0.35rem 0 0.25rem; }
 .formBlock :where(input[type="text"], input[type="email"], input[type="tel"], textarea) {
@@ -173,7 +174,7 @@
 .page { background: #fff; }
 
 .headerBar {
-  background: linear-gradient(90deg, var(--club-red), var(--club-red-dark));
+  background: linear-gradient(90deg, var(--club-red-logo), var(--club-red-dark));
   color: #fff;
 }
 .headerInner {
@@ -185,7 +186,7 @@
   padding: 0.6rem 1rem;
 }
 .brand { display: flex; align-items: center; gap: 0.5rem; font-weight: 800; letter-spacing: 0.02em; }
-.brandMark { filter: drop-shadow(0 1px 0 rgba(0,0,0,0.2)); }
+.brandMark img { height: 48px; }
 .brandText { font-size: 1.05rem; }
 .nav { display: none; gap: 1rem; }
 .nav a { color: #fff; text-decoration: none; opacity: 0.95; }
@@ -204,10 +205,10 @@
   align-items: center;
   padding: 3rem 1rem 3.25rem;
   background:
-    linear-gradient(135deg, rgba(225,17,17,0.88) 0%, rgba(180,7,7,0.88) 50%, rgba(122,4,4,0.90) 100%),
+    linear-gradient(135deg, rgba(225,17,17,0.7) 0%, rgba(180,7,7,0.7) 50%, rgba(122,4,4,0.7) 100%),
     radial-gradient(1200px 600px at -20% -10%, rgba(255, 255, 255, 0.10), rgba(255,255,255,0) 60%),
     radial-gradient(900px 500px at 120% -20%, rgba(255, 255, 255, 0.08), rgba(255,255,255,0) 60%),
-    url('https://images.unsplash.com/photo-1518091043644-c1d4457512c6?q=80&w=1920&auto=format&fit=crop&ixlib=rb-4.0.3');
+    url('/images/site-hero.webp');
   background-size: auto, auto, auto, cover;
   background-position: center, center, center, center;
   background-repeat: no-repeat;

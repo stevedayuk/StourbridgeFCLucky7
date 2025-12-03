@@ -8,14 +8,15 @@ export default function HomePage() {
       <div className={styles.headerBar}>
         <div className={styles.headerInner}>
           <div className={styles.brand}>
-            <span className={styles.brandMark}>⚽</span>
+            <span className={styles.brandMark}>
+                <img src="/images/logo-bg.webp" alt="Stourbridge FC" />
+            </span>
             <span className={styles.brandText}>Stourbridge FC</span>
           </div>
           <nav className={styles.nav} aria-label="Primary">
             <a href="#benefits">Benefits</a>
             <a href="#winners">Winners</a>
             <a href="#register">Register</a>
-            <a href="#faq">FAQ</a>
           </nav>
           <a href="#register" className={styles.ctaSm}>Join Lucky 7</a>
         </div>
@@ -27,7 +28,7 @@ export default function HomePage() {
           <h1 className={styles.heroTitle}>Lucky 7 — Win Big, Support Your Club</h1>
           <p className={styles.heroTag}>7 prizes every month with a top prize of £250. Your entry directly supports Stourbridge FC.</p>
           <div className={styles.heroActions}>
-            <a href="#register" className={styles.ctaPrimary}>Register for the next draw</a>
+            <a href="#register" className={styles.ctaPrimary}>Register</a>
             <a href="#benefits" className={styles.ctaGhost}>See how it works</a>
           </div>
         </div>
@@ -43,7 +44,7 @@ export default function HomePage() {
       <section id="benefits" className={styles.bento} aria-labelledby="benefits-heading">
         <h2 id="benefits-heading" className={styles.sectionTitle}>Why join Lucky 7?</h2>
         <div className={styles.bentoGrid}>
-          <article className={`${styles.bentoCard} ${styles.cardAccent} ${styles.cardGlow}`}>
+          <article className={`${styles.bentoCard} ${styles.cardGlow}`}>
             <div className={styles.cardIcon}>💷</div>
             <h3>Top prize £250</h3>
             <p>Our headline prize each month — plus six more chances to win.</p>
