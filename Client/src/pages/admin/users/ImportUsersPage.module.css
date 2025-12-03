@@ -1,0 +1,13 @@
+.importedResultsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.spinnerContainer {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+}

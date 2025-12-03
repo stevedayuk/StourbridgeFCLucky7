@@ -7,8 +7,8 @@ import PrivateRoutes from "./PrivateRoutes.tsx";
 import LoginPage from "../pages/admin/LoginPage.tsx";
 import AdminHomePage from "../pages/admin/AdminHomePage.tsx";
 import AdminLayout from "../layouts/AdminLayout.tsx";
-import UsersPage from "../pages/admin/UsersPage.tsx";
-import ImportUsersPage from "../pages/admin/ImportUsersPage.tsx";
+import UsersPage from "../pages/admin/users/UsersPage.tsx";
+import ImportUsersPage from "../pages/admin/users/ImportUsersPage.tsx";
 import {HomePageRedirect} from "../pages/HomePageRedirect.tsx";
 
 export default function Routes() {
