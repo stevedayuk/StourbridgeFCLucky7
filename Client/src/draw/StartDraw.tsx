@@ -5,6 +5,7 @@ import type {CurrentDrawInfo} from "../types/CurrentDrawInfo.ts";
 import styles from './StartDraw.module.css';
 import {useEffect, useState} from "react";
 import Spinner from "../layouts/Spinner.tsx";
+import AdminTextHeader from "../admin/AdminTextHeader.tsx";
 
 type ExportFormProps = {
     isTest?: boolean;
@@ -40,7 +41,7 @@ export default function StartDraw(props: ExportFormProps) {
 
     return <div className={styles.startDraw}>
         {props.isTest && <div>
-            <h1>Start New Test Draw</h1>
+            <AdminTextHeader backHref={"/admin"} title={"Start New Test Draw"} />
             <p>You are about to start a new test draw.</p>
             <Alert variant={"info"}>
                 This draw will use the current active user data, but will not save the selected winners to the database.

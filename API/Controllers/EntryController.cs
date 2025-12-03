@@ -25,9 +25,12 @@ public class EntryController : ControllerBase
     }
 
     [HttpPut("update-entries")]
-    public async Task<IActionResult> UpdateEntries(List<ParsedDrawEntryDto> entries, int drawMonth, int drawYear)
+    public async Task<ActionResult<ActionResultDto>> UpdateEntries(List<ParsedDrawEntryDto> entries, int drawMonth, int drawYear)
     {
         await _entryService.UpdateEntriesAsync(entries, drawMonth, drawYear);
-        return Ok();
+        return new ActionResultDto
+        {
+            Success = true
+        };
     }
 }
