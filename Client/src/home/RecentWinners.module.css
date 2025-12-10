@@ -1,0 +1,15 @@
+.tableFixedWidth {
+    width: 75px;
+}
+
+@media (min-width: 576px) {
+    .tableFixedWidth {
+        width: 150px;
+    }
+}
+
+@media (min-width: 992px) {
+    .tableFixedWidth {
+        width: 200px;
+    }
+}

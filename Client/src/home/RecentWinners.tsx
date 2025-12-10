@@ -1,10 +1,11 @@
-import styles from '../pages/HomePage.module.css';
 import {get} from "../util/http.ts";
 import {useEffect, useState} from "react";
 import type {PublicWinners} from "../types/PublicWinners.ts";
 import type {PublicDraw} from "../types/PublicDraw.ts";
 import {getMonthNameByNumber} from "../util/date.ts";
 import type {PublicWinner} from "../types/PublicWinner.ts";
+import styles from './RecentWinners.module.css';
+import homeStyles from '../pages/HomePage.module.css';
 
 export default function RecentWinners() {
     const [draws, setDraws] = useState<PublicDraw[]>([]);
@@ -30,6 +31,14 @@ export default function RecentWinners() {
         // Select the most recent year; months will be derived in useEffect
         const mostRecentYear = years.length ? years[years.length - 1] : undefined;
         setSelectedDrawYear(mostRecentYear);
+    }
+
+    async function handleSelectedYearChange(year: number) {
+        setSelectedDrawYear(year);
+
+        const drawYearMonths = draws.filter(d => d.year === year).map(d => d.month);
+        setDrawMonths(drawYearMonths);
+        setSelectedDrawMonth(drawYearMonths.length ? drawYearMonths[drawYearMonths.length - 1] : undefined);
     }
 
     // Derive months whenever draws or selected year change
@@ -68,9 +77,9 @@ export default function RecentWinners() {
     }, []);
 
     return (
-        <section id="winners" className={styles.bento} aria-labelledby="winners-heading">
-            <h2 id="winners-heading" className={styles.sectionTitle}>Most recent draw winners</h2>
-            <div className={`${styles.panel} ${styles.panelGlow}`} role="region" aria-label="Winners table">
+        <section id="winners" className={homeStyles.bento} aria-labelledby="winners-heading">
+            <h2 id="winners-heading" className={homeStyles.sectionTitle}>Most recent draw winners</h2>
+            <div className={`${homeStyles.panel} ${homeStyles.panelGlow}`} role="region" aria-label="Winners table">
                 <div style={{display: 'flex', gap: '0.5rem'}}>
                     <div>
                         Winners by draw:
@@ -88,7 +97,7 @@ export default function RecentWinners() {
 
                     <select
                         value={selectedDrawYear ?? ""}
-                        onChange={(e) => setSelectedDrawYear(Number(e.target.value))}
+                        onChange={(e) => handleSelectedYearChange(Number(e.target.value))}
                     >
                         {drawYears.map((year) => (
                             <option key={year} value={year}>{year}</option>
@@ -96,9 +105,9 @@ export default function RecentWinners() {
                     </select>
                 </div>
 
-                <div className={styles.tableWrap}>
-                    <table className={styles.winnersTable} aria-describedby="winners-heading">
-                        <caption className={styles['visually-hidden']}>
+                <div className={homeStyles.tableWrap}>
+                    <table className={homeStyles.winnersTable} aria-describedby="winners-heading">
+                        <caption className={homeStyles['visually-hidden']}>
                             List of prize winners for the most recent draw
                         </caption>
                         <thead>
@@ -115,8 +124,8 @@ export default function RecentWinners() {
                         {selectedDrawWinners.length > 0 &&
                             selectedDrawWinners.map((winner) => (
                                 <tr key={winner.number}>
-                                    <td>£{winner.prizeAmount}</td>
-                                    <td>{winner.number}</td>
+                                    <td className={styles.tableFixedWidth}>£{winner.prizeAmount}</td>
+                                    <td className={styles.tableFixedWidth}>{winner.number}</td>
                                     <td>{winner.name}</td>
                                 </tr>
                             ))
