@@ -50,7 +50,7 @@ public class WinnersService
             .Include(e => e.Entry)
             .Include(e => e.PrizeLevel)
             .Where(e => e.Draw.Month == month && e.Draw.Year == year)
-            .OrderByDescending(p => p.PrizeLevel.Amount)
+            .OrderByDescending(p => p.PrizeLevel.Amount).ThenByDescending(p => p.Id)
             .Select(p => new PublicWinnerDto
             {
                 PrizeAmount = p.PrizeLevel.Amount,
