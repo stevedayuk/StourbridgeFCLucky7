@@ -2,18 +2,21 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using StourbridgeFc.Lucky7.Data;
 
 #nullable disable
 
-namespace StourbridgeFC.Lucky7.Data.Migrations
+namespace StourbridgeFc.Lucky7.Data.Migrations
 {
     [DbContext(typeof(Lucky7Context))]
-    partial class Lucky7ContextModelSnapshot : ModelSnapshot
+    [Migration("20260317175102_AddDateTimeRevokedToDrawWinner")]
+    partial class AddDateTimeRevokedToDrawWinner
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,13 +34,13 @@ namespace StourbridgeFC.Lucky7.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime?>("DateTimeDrawCompleted")
+                    b.Property<DateTime?>("DateTimeDrawCompletedUtc")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("date_time_draw_completed");
+                        .HasColumnName("date_time_draw_completed_utc");
 
-                    b.Property<DateTime>("DateTimeDrawStarted")
+                    b.Property<DateTime>("DateTimeDrawStartedUtc")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("date_time_draw_started");
+                        .HasColumnName("date_time_draw_started_utc");
 
                     b.Property<int>("Month")
                         .HasColumnType("integer")
@@ -62,9 +65,9 @@ namespace StourbridgeFC.Lucky7.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("DateTimeDrawn")
+                    b.Property<DateTime>("DateTimeDrawnUtc")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("date_time_drawn");
+                        .HasColumnName("date_time_drawn_utc");
 
                     b.Property<DateTime?>("DateTimeRevoked")
                         .HasColumnType("timestamp with time zone")
@@ -114,15 +117,15 @@ namespace StourbridgeFC.Lucky7.Data.Migrations
                         .HasColumnType("date")
                         .HasColumnName("active_to");
 
-                    b.Property<DateTime>("DateTimeAdded")
+                    b.Property<DateTime>("DateTimeAddedUtc")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("date_time_added")
+                        .HasColumnName("date_time_added_utc")
                         .HasDefaultValueSql("now() at time zone 'utc' ");
 
-                    b.Property<DateTime?>("DateTimeLastUpdated")
+                    b.Property<DateTime?>("DateTimeLastUpdatedUtc")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("date_time_last_updated");
+                        .HasColumnName("date_time_last_updated_utc");
 
                     b.Property<string>("Name")
                         .IsRequired()

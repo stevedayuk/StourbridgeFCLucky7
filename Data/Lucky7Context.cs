@@ -40,7 +40,7 @@ public class Lucky7Context : DbContext
             entity.Property(e => e.Id)
                 .ValueGeneratedOnAdd();
             
-            entity.Property(e => e.DateTimeAddedUtc).HasDefaultValueSql("now() at time zone 'utc' ");
+            entity.Property(e => e.DateTimeAdded).HasDefaultValueSql("now() at time zone 'utc' ");
         });
     }
 }

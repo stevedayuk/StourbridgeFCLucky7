@@ -24,7 +24,7 @@ public class DrawService
             throw new InvalidOperationException("No draw found for the specified month and year.");
         }
 
-        existingDraw.DateTimeDrawCompletedUtc = DateTime.UtcNow;
+        existingDraw.DateTimeDrawCompleted = DateTime.UtcNow;
         
         DateOnly nextDrawDate = new DateOnly(currentDrawInfo.DrawYear, currentDrawInfo.DrawMonth, 1).AddMonths(1);
         
@@ -101,8 +101,8 @@ public class DrawService
         }
         
         var currentDrawDetails = await _dataContext.Draws
-            .Where(p => p.Month == drawMonth && p.Year == drawYear && p.DateTimeDrawCompletedUtc == null)
-            .Select(p => new {p.Id, p.DateTimeDrawCompletedUtc})
+            .Where(p => p.Month == drawMonth && p.Year == drawYear && p.DateTimeDrawCompleted == null)
+            .Select(p => new {p.Id, DateTimeDrawCompletedUtc = p.DateTimeDrawCompleted})
             .FirstOrDefaultAsync();
         var currentDrawInProgress =
             currentDrawDetails is { } && currentDrawDetails.DateTimeDrawCompletedUtc.HasValue is false;
@@ -287,7 +287,7 @@ public class DrawService
             DrawId = setDrawWinner.DrawId,
             PrizeLevelId = setDrawWinner.PrizeLevelId,
             EntryId = setDrawWinner.EntryId,
-            DateTimeDrawnUtc = DateTime.UtcNow
+            DateTimeDrawn = DateTime.UtcNow
         };
         
         _dataContext.DrawWinners.Add(drawWinner);
@@ -302,7 +302,7 @@ public class DrawService
         {
             Month = currentDrawInfo.DrawMonth,
             Year = currentDrawInfo.DrawYear,
-            DateTimeDrawStartedUtc = DateTime.UtcNow,
+            DateTimeDrawStarted = DateTime.UtcNow,
         };
         
         _dataContext.Draws.Add(newDraw);

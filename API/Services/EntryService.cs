@@ -83,7 +83,7 @@ public class EntryService
     private void DeactivateEntry(Entry entry, DateOnly activeToDate)
     {
         entry.ActiveTo = activeToDate;
-        entry.DateTimeLastUpdatedUtc = DateTime.UtcNow;
+        entry.DateTimeLastUpdated = DateTime.UtcNow;
     }
 
     private string GetEntryName(string spreadsheetEntryName, string pascalCaseNameOrder, string upperCaseNameOrder)
