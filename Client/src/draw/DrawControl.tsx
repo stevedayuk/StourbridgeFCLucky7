@@ -2,7 +2,7 @@ import styles from './DrawControl.module.css';
 import {useAppDispatch, useAppSelector} from "../store/hooks.ts";
 import {useRef, useState} from "react";
 import Button from 'react-bootstrap/Button'
-import {setAsWinner} from "../store/current-draw-slice.ts";
+import {setAsWinner, setDrawComplete} from "../store/current-draw-slice.ts";
 import type {DrawEntry} from "../types/DrawEntry.ts";
 import type {DrawWinner} from "../types/DrawWinner.ts";
 import { ApiService } from '../services/apiService.ts';
@@ -14,6 +14,7 @@ type DrawControlProps = {
 
 export default function DrawControl(props: DrawControlProps) {
     const currentDraw = useAppSelector(state => state.currentDraw.draw);
+    const isDrawComplete = useAppSelector(state => state.currentDraw.isDrawComplete);
     const [currentWinner, setCurrentWinner] = useState<DrawEntry | null>(null);
     const [currentWinningPrizeLevel, setCurrentWinningPrizeLevel] = useState<DrawWinner | null>(null);
     const dispatch = useAppDispatch();
@@ -22,7 +23,6 @@ export default function DrawControl(props: DrawControlProps) {
     const entryCount = entries?.length ?? 0;
     const [number, setNumber] = useState(0);
     const [isDrawing, setIsDrawing] = useState(false);
-    const [isDrawComplete, setIsDrawComplete] = useState(false);
     const timerRef = useRef<number | null>(null);
 
     function completeDraw() {
@@ -66,14 +66,14 @@ export default function DrawControl(props: DrawControlProps) {
             if (elapsed >= duration && timerRef.current) {
                 setNumber(potentialWinner.number);
                 setCurrentWinner(potentialWinner);
-                dispatch(setAsWinner(
-                    {
-                        drawEntry: potentialWinner,
-                        prizeAmount: currentWinningPrizeLevel.prizeAmount,
-                        drawOrder: currentDraw.drawOrder,
-                        isTest: currentDraw.isTest
-                    }
-                ));
+                // dispatch(setAsWinner(
+                //     {
+                //         drawEntry: potentialWinner,
+                //         prizeAmount: currentWinningPrizeLevel.prizeAmount,
+                //         drawOrder: currentDraw.drawOrder,
+                //         isTest: currentDraw.isTest
+                //     }
+                // ));
 
                 clearInterval(timerRef.current);
                 setIsDrawing(false);
@@ -90,8 +90,10 @@ export default function DrawControl(props: DrawControlProps) {
                         await ApiService.put(endpointUrl, body);
                     }
 
-                    setIsDrawComplete(true);
+                    dispatch(setDrawComplete(true));
                 }
+
+                let drawWinnerId : number | null = null;
 
                 if (!currentDraw.isTest && currentDraw.drawInfo?.drawId) {
                     const setDrawWinner: SetDrawWinner = {
@@ -101,8 +103,17 @@ export default function DrawControl(props: DrawControlProps) {
                     };
 
                     const endpointUrl = "/draws/set-winner";
-                    await ApiService.post(endpointUrl, setDrawWinner)
+                    const drawWinner = await ApiService.post<DrawWinner>(endpointUrl, setDrawWinner);
+                    drawWinnerId = drawWinner.id;
                 }
+
+                dispatch(setAsWinner({
+                    drawWinnerId: drawWinnerId,
+                    drawEntry: potentialWinner,
+                    prizeAmount: currentWinningPrizeLevel.prizeAmount,
+                    drawOrder: currentDraw.drawOrder,
+                    isTest: currentDraw.isTest
+                }));
             }
         }, interval);
 

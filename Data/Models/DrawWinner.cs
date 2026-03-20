@@ -10,9 +10,6 @@ public class DrawWinner
     public int EntryId { get; set; }
     public DateTime DateTimeDrawn { get; set; }
     public DateTime? DateTimeRevoked { get; set; }
-    
-    [NotMapped]
-    public bool IsRevoked => DateTimeRevoked.HasValue;
 
     public Draw Draw { get; set; } = null!;
     public PrizeLevel PrizeLevel { get; set; } = null!;

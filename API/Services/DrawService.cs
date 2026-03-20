@@ -184,7 +184,7 @@ public class DrawService
                 .AsNoTracking()
                 .Include(p => p.Entry)
                 .Include(p => p.PrizeLevel)
-                .Where(p => p.DrawId == currentDraw.DrawId)
+                .Where(p => p.DrawId == currentDraw.DrawId && p.DateTimeRevoked == null)
                 .ToListAsync();
 
             if (drawEntriesList is not null)
@@ -224,6 +224,7 @@ public class DrawService
                     var winner = prizeWinners[winnerIndex];
                     drawPrize = new DrawWinnerDto
                     {
+                        Id = winner.Id,
                         Number = winner.Entry.Number,
                         Name = winner.Entry.Name,
                         PrizeLevelId = prizeLevel.Id,
@@ -278,6 +279,19 @@ public class DrawService
         currentDraw.Winners = winnersList;
 
         return currentDraw;
+    }
+
+    public async Task<DrawWinner?> RevokeDrawWinnerAsync(int drawWinnerId)
+    {
+        DrawWinner? drawWinner = await _dataContext.DrawWinners.FindAsync(drawWinnerId);
+
+        if (drawWinner is null)
+            return null;
+        
+        drawWinner.DateTimeRevoked = DateTime.UtcNow;
+        await _dataContext.SaveChangesAsync();
+        
+        return drawWinner;
     }
 
     public async Task<DrawWinner> SetDrawWinnerAsync(SetDrawWinnerDto setDrawWinner)

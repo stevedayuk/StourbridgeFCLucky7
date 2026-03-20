@@ -19,6 +19,10 @@
     color: white;
 }
 
+.winnersTable > tbody > tr {
+    cursor: pointer;
+}
+
 .prizeAmountColumn {
     width: 90px;
 }

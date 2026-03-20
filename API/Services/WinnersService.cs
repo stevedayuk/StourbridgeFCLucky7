@@ -40,16 +40,10 @@ public class WinnersService
 
     public async Task<List<PublicWinnerDto>> GetDisplayWinnersAsync(int month, int year)
     {
-        var x = await _dataContext.DrawWinners
-            .Include(e => e.Entry)
-            .Include(e => e.PrizeLevel)
-            // .Where(e => e.Draw.Month == month && e.Draw.Year == year)
-            .ToListAsync();
-        
         List<PublicWinnerDto> currentDrawWinners = await _dataContext.DrawWinners
             .Include(e => e.Entry)
             .Include(e => e.PrizeLevel)
-            .Where(e => e.Draw.Month == month && e.Draw.Year == year)
+            .Where(e => e.Draw.Month == month && e.Draw.Year == year && e.DateTimeRevoked == null)
             .OrderByDescending(p => p.PrizeLevel.Amount).ThenByDescending(p => p.Id)
             .Select(p => new PublicWinnerDto
             {

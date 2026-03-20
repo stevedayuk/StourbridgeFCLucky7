@@ -46,6 +46,14 @@ public class DrawController : ControllerBase
         return currentDraw;
     }
 
+    [HttpPut("revoke-winner/{drawWinnerId}")]
+    public async Task<ActionResult<DrawWinner?>> RevokeDrawWinner(int drawWinnerId)
+    {
+        var updatedDrawWinner = await _drawService.RevokeDrawWinnerAsync(drawWinnerId);
+        
+        return updatedDrawWinner;
+    }
+
     [HttpPost("set-winner")]
     public async Task<ActionResult<DrawWinner>> SetDrawWinner(SetDrawWinnerDto setDrawWinner)
     {
