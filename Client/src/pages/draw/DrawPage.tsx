@@ -24,8 +24,10 @@ export default function DrawPage(props: DrawPageProps) {
             return;
         }
 
-        const endpointUrl = "/draws/start";
-        await ApiService.post(endpointUrl, currentDrawInfo);
+        if (!props.isTest) {
+            const endpointUrl = "/draws/start";
+            await ApiService.post(endpointUrl, currentDrawInfo);
+        }
 
         setIsDrawing(true);
     }
