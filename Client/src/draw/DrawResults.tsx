@@ -3,6 +3,7 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Table from 'react-bootstrap/Table';
 import styles from './DrawResults.module.css';
+import DrawBrandHeader from "./DrawBrandHeader.tsx";
 // import DrawPromo from "./DrawPromo.tsx";
 
 type DrawResultsProps = {
@@ -15,6 +16,7 @@ export default function DrawResults(props: DrawResultsProps) {
 
     return <div className={styles.drawResults}>
         <div className={styles.drawResultsContainer}>
+            <DrawBrandHeader />
             <div className={styles.drawResultsHeader}>
                 {props.drawMonthName && props.drawYear && <h1>{props.drawMonthName} {props.drawYear} Draw Winners</h1>}
                 {(!props.drawMonthName || !props.drawYear) && <h1>Test Draw Winners</h1>}

@@ -1,0 +1,16 @@
+.drawBrandHeader {
+    align-items: center;
+    display: flex;
+    gap: 1rem;
+    padding: 1.5rem 0;
+    text-transform: uppercase;
+    vertical-align: middle;
+}
+
+.drawBrandHeader h1 {
+    font-size: 3.5rem;
+}
+
+.drawBrandHeader img {
+    height: 100px;
+}

@@ -2,5 +2,5 @@
     display: flex;
     flex: 1;
     flex-direction: column;
-    height: calc(100vh - 72px);
+    height: 100vh;
 }

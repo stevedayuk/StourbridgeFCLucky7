@@ -1,11 +1,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
 
 :root {
-    --sfc-red: #b70707;
+    /* --sfc-red: #b70707; */
+    --sfc-red: #6a172b;
+    --sfc-red-contrast: #b70707;
 }
 
 body {
     font-family: 'Oswald', sans-serif;
     margin: 0;
     padding: 0;
+}
+
+.btn-primary {
+    --bs-btn-bg: var(--sfc-red);
+    --bs-btn-border-color: var(--sfc-red-contrast);
+    --bs-btn-hover-bg: var(--sfc-red-contrast);
+    --bs-btn-hover-border-color: var(--sfc-red-contrast);
+    --bs-btn-active-border-color: var(--sfc-red-contrast);
+    --bs-btn-active-bg: var(--sfc-red-contrast);
+    --bs-btn-disabled-border-color: var(--sfc-red);
 }

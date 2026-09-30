@@ -15,7 +15,7 @@
 }
 
 .winnersTable > tbody > tr:nth-child(2n+1) > td {
-    background-color: var(--sfc-red);
+    background-color: var(--sfc-red-contrast);
     color: white;
 }
 
