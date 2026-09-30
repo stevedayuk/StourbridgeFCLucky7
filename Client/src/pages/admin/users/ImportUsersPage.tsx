@@ -119,7 +119,7 @@ export default function ImportUsersPage() {
                             <FontAwesomeIcon icon={faInfoCircle} />
                             Users have been successfully updated.</div>
                         <Link to={"/admin"}>
-                            <Button variant={"danger"}>Return to Admin home page</Button>
+                            <Button variant={"primary"}>Return to Admin home page</Button>
                         </Link>
                     </Alert>
                 </div>
@@ -140,7 +140,7 @@ export default function ImportUsersPage() {
                         <input type="file" className="form-control" onChange={handleFileChange} />
                     </InputGroup>
                     {file && !isParsingUploadFile && !isUpdatingUsers && <div className={"mt-3"}>
-                        <Button variant="danger" onClick={handleUpload}>
+                        <Button variant="primary" onClick={handleUpload}>
                             <FontAwesomeIcon className={"me-2"} icon={faScroll} />
                             Upload and Check File</Button>
                     </div>}
@@ -177,7 +177,7 @@ export default function ImportUsersPage() {
                         <h2>Ready To Update?</h2>
                         <div>Everything look good with the results from the uploaded spreadsheet?</div>
                         <div className={"py-3"}>
-                            <Button variant="danger" onClick={handleUpdateUsers}>
+                            <Button variant="primary" onClick={handleUpdateUsers}>
                                 <FontAwesomeIcon className={"me-2"} icon={faUpload} />
                                 Update Users
                             </Button>

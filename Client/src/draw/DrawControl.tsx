@@ -137,7 +137,7 @@ export default function DrawControl(props: DrawControlProps) {
                     {(!isDrawing && !isDrawComplete) &&
 
                         <Button className={"w-100"}
-                                variant={"danger"}
+                                variant={"primary"}
                                 size={"lg"}
                                 onClick={() => drawNumber()}>
                             Draw Number
@@ -145,7 +145,7 @@ export default function DrawControl(props: DrawControlProps) {
                     }
                     {!isDrawing && isDrawComplete &&
                         <Button className={"w-100"}
-                                variant={"danger"}
+                                variant={"primary"}
                                 size={"lg"}
                                 onClick={() => completeDraw()}>
                             Complete Draw

@@ -1,5 +1,9 @@
 .page {
-    background-color: #030303;
+    background-color: var(--sfc-red);
     color: white;
     height: 100vh;
+}
+
+.startDrawPage {
+    background-color: #030303;
 }

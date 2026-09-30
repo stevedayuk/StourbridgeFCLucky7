@@ -1,4 +1,4 @@
-import headerLogo from '../assets/images/header_logo.png'
+import headerLogo from '../assets/images/header_logo_150.png'
 import styles from './AdminHeader.module.css';
 import type {AdminHeaderMode} from "../types/AdminHeaderMode.ts";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

@@ -1,11 +1,12 @@
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
-import { ApiService } from "../services/apiService.ts";
+import {ApiService} from "../services/apiService.ts";
 import type {CurrentDrawInfo} from "../types/CurrentDrawInfo.ts";
 import styles from './StartDraw.module.css';
 import {useEffect, useState} from "react";
 import Spinner from "../layouts/Spinner.tsx";
 import AdminTextHeader from "../admin/AdminTextHeader.tsx";
+import AdminHeader from "../admin/AdminHeader.tsx";
 
 type ExportFormProps = {
     isTest?: boolean;
@@ -22,7 +23,7 @@ export default function StartDraw(props: ExportFormProps) {
 
         const currentDrawDate = new Date(currentDrawInfo.drawYear, currentDrawInfo.drawMonth - 1, 1);
         setDrawInfo(currentDrawInfo);
-        setCurrentDrawMonthName(currentDrawDate.toLocaleString('default', { month: 'long' }));
+        setCurrentDrawMonthName(currentDrawDate.toLocaleString('default', {month: 'long'}));
     }
 
     useEffect(() => {
@@ -30,7 +31,7 @@ export default function StartDraw(props: ExportFormProps) {
     }, []);
 
     if (!drawInfo) {
-        return <Spinner />;
+        return <Spinner/>;
     }
 
     const drawButtonLabel = props.isTest
@@ -39,38 +40,45 @@ export default function StartDraw(props: ExportFormProps) {
             ? 'Continue Draw'
             : 'Start Draw';
 
-    return <div className={styles.startDraw}>
-        {props.isTest && <div>
-            <AdminTextHeader backHref={"/admin"} title={"Start New Test Draw"} />
-            <p>You are about to start a new test draw.</p>
-            <Alert variant={"info"}>
-                This draw will use the current active user data, but will not save the selected winners to the database.
-            </Alert>
-        </div>}
+    return <>
+        <AdminHeader mode={"draw"}/>
+        <div className={styles.startDraw}>
+            {props.isTest && <div>
+                <AdminTextHeader backHref={"/admin"} title={"Start New Test Draw"}/>
+                <p>You are about to start a new test draw.</p>
+                <Alert variant={"info"}>
+                    This draw will use the current active user data, but will not save the selected winners to the
+                    database.
+                </Alert>
+            </div>}
 
-        {!props.isTest && !drawInfo.inProgress && <div>
-            <AdminTextHeader backHref={"/admin"} title={"Start New Draw"} />
-            <p>You're about to start a new draw for {currentDrawMonthName} {drawInfo.drawYear}.</p>
-            <Alert variant={"warning"}>
-                After selecting 'Start Draw' below, don't forget to go into Full Screen mode before displaying the draw screen to the public.
-            </Alert>
-        </div>}
+            {!props.isTest && !drawInfo.inProgress && <div>
+                <AdminTextHeader backHref={"/admin"} title={"Start New Draw"}/>
+                <p>You're about to start a new draw for {currentDrawMonthName} {drawInfo.drawYear}.</p>
+                <Alert variant={"warning"}>
+                    After selecting 'Start Draw' below, don't forget to go into Full Screen mode before displaying the
+                    draw screen to the public.
+                </Alert>
+            </div>}
 
-        {!props.isTest && drawInfo.inProgress && <div>
-            <h1>Continue Draw</h1>
-            <p>You're about to continue the draw for {currentDrawMonthName} {drawInfo.drawYear}</p>
-            <Alert variant={"danger"}>
-                Any already drawn winners will be already populated and the draw will continue with the next un-drawn prize.
-            </Alert>
-            <Alert variant={"warning"}>
-                After selecting 'Start Draw' below, don't forget to go into Full Screen mode before displaying the draw screen to the public.
-            </Alert>
-        </div>}
+            {!props.isTest && drawInfo.inProgress && <div>
+                <h1>Continue Draw</h1>
+                <p>You're about to continue the draw for {currentDrawMonthName} {drawInfo.drawYear}</p>
+                <Alert variant={"danger"}>
+                    Any already drawn winners will be already populated and the draw will continue with the next
+                    un-drawn prize.
+                </Alert>
+                <Alert variant={"warning"}>
+                    After selecting 'Start Draw' below, don't forget to go into Full Screen mode before displaying the
+                    draw screen to the public.
+                </Alert>
+            </div>}
 
-        <Button variant="danger"
-                onClick={() => props.startDraw(drawInfo)}
-                size={"lg"}>
-            {drawButtonLabel}
-        </Button>
-    </div>;
+            <Button variant="primary"
+                    onClick={() => props.startDraw(drawInfo)}
+                    size={"lg"}>
+                {drawButtonLabel}
+            </Button>
+        </div>
+    </>;
 }
